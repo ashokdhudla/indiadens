@@ -1,0 +1,287 @@
+{% extends 'base-home.html' %}
+{% block content %}
+<style>
+  .hoverDiv {background: #fff;}
+  .hoverDiv:hover {background: #f5f5f5;}
+  .phoneno {color:#0066FF;}
+  .pointer {cursor:pointer;}
+</style>
+{%if ErrorMessage %}
+<div class="alert alert-dismissable" id="id_div2">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  <strong>Warning!</strong>
+  <p> Your Account is not verified please try again</p>
+</div>
+{%else%}
+ {%endif%}
+ {% if not request.session.Visitor%}
+<div id="updatediv" style="background-color:#FEEFE0; height:50px;">
+  <p id="ErrorMessage"></p>
+  <form action="visitor-login" method="post" id="visitorsform" class="form-inline">
+    {%csrf_token%} <br />
+    Are you returning user ? Login
+    <input name="VisitorMobile" type="text" style="width:100px" id="mobileno" placeholder='Mobile Number' />
+    Password
+    <input name="MobilePIN" type="text" size="6" maxlength="6" style="width:50px" id="mobilepin" placeholder='iPIN'/>
+    <input type="button" class="btnvisitor btn-mini" onclick="return visitorValidation()" value='Show Contacts' id="update">
+  </form>
+</div>
+{% endif %}
+<!-- Begin Round Rect -->
+<table width="90%" cellpadding="0" cellspacing="0" align="center">
+  <tr>
+    <td class="lt1">&nbsp;</td>
+    <td class="topbg">&nbsp;</td>
+    <td class="rt-1">&nbsp;</td>
+  </tr>
+  <tr>
+    <td class="leftbg">&nbsp;</td>
+    <td valign="top"><!-- Begin Iteration -->
+      <table width="100%" border="0" cellspacing="1" cellpadding="3" align="left">
+        <tr>
+		{%if request.session.PType == "10"%}
+          <td align="left"><legend style="color:#FF6600">Residential Apartments for Sale</legend></td>
+		  {%endif%}
+		 {%if request.session.PType == "20"%}
+		 <td align="left"><legend style="color:#FF6600">Independent Homes/Villas for Sale</legend></td>
+		 {%endif%}
+		 {%if request.session.PType == "30"%}
+		 <td align="left"><legend style="color:#FF6600">Pent Houses for Sale</legend></td>
+		 {%endif%}
+		 {%if request.session.PType == "40"%}
+		 <td align="left"><legend style="color:#FF6600">Form Houses for Sale</legend></td>
+		 {%endif%}
+		 {%if request.session.PType == "50"%}
+		 <td align="left"><legend style="color:#FF6600">Office spaces for Sale</legend></td>
+		 {%endif%}
+		 {%if request.session.PType == "100"%}
+		 <td align="left"><legend style="color:#FF6600">Residential Lands for Sale</legend></td>
+		 {%endif%}
+    	 {%if request.session.PType == "110"%}
+		 <td align="left"><legend style="color:#FF6600">Commercial Lands for Sale</legend></td>
+		 {%endif%}
+        </tr>
+        {% for obj in Listings %}
+        {% if forloop.counter|divisibleby:"2" == 0 %}
+        <tr bgcolor="#FAEFEB"> {% endif %}
+          <td><table width="100%" border="0" cellspacing="1" cellpadding="3">
+              <tr>
+                <td width="204" height="150px" rowspan="2" valign="top"><a href="/listing-info?lid={{obj.listingid}}&type={{ListingType}}" target="_blank"><img src="{{IMAGE_URL}}{{obj.imagethumb}}" width="200px" height="200px" /></a></td>
+                <td width="1029"><a href="/listing-info?lid={{obj.listingid}}&type={{ListingType}}" target="_blank">{{obj.title}}</a></td>
+                <td width="200px" align="right">Price Rs. {{obj.price}}</td>
+              </tr>
+              <tr>
+                <td colspan="2" valign="top"><div align="left" style="width:100%; float:left; color:#009933">{{obj.address}}, {{obj.City.name}}, {{obj.State.name}}</div>
+                  <div align="left" style="width:100%; float:left">Bed Rooms: {{obj.bedrooms}} Bath Rooms:{{obj.bathrooms}} Area: {{obj.area}} {{obj.areaunit}}</div>
+                  <div align="left" style="width:100%; float:left">{{obj.description}}</div>
+                  <div align="left" style="width:50%; float:left">Owner/Agent/Builder: {{obj.contactname}} &nbsp; EMail: {{obj.email}}
+                    {%if request.session.Visitor.ismobileverified == 1%} 
+                    Phone: {{obj.phone}}
+                    {%else%} <span class="pointer phoneno" onclick="showDialog()" id="Id_dialog">View Contact Number</span> {%endif%}                  </div>
+                  <div style="float:right">Posted Date:{{obj.posteddate|date:"d M Y"}}</div>                  </td>
+              </tr>
+            </table></td>
+        </tr>
+        {% endfor %}
+      </table>
+      <!-- End Iteration -->
+    </td>
+    <td class="rightbg">&nbsp;</td>
+  </tr>
+  <tr>
+    <td class="lt2">&nbsp;</td>
+    <td class="bott-bg">&nbsp;</td>
+    <td class="rt-2">&nbsp;</td>
+  </tr>
+</table>
+<!-- End Round Rect -->
+<div class="pagination"> <span class="step-links">
+<a href="?page=1">First</a>
+
+ {% if Listings.has_previous %} <a href="?page={{Listings.previous_page_number }}">previous</a> {% endif %} 
+ <span class="current"> Page {{ Listings.number }} of {{ Listings.paginator.num_pages }}. </span> {% if Listings.has_next %} <a href="?page={{ Listings.next_page_number }}">next</a> {% endif %} 
+ <a href="?page={{lastpage}}">Last</a>
+ </span> </div>
+<div class="container">
+  <div id="VisitorRegModel" class="modal hide fade in" style="display: none; ">
+    <div class="modal-header" align="left"> <a class="close" data-dismiss="modal">x</a>
+      <h5>Mobile Confirmation</h5>
+    </div>
+    <div class="modal-body" align="left"> Thank you for using our service. Due to the privacy and spam protections, 
+      We need to verify your mobile number. This is one time verification only.
+      <form action="confirm-code" method="post" id="theForm">
+        {%csrf_token%}
+        <div align="left"> Name:
+          <input type="text" name="name" id="id_name" /><p id="Err1"> </p>
+        </div>
+        <div align="left"> Email:
+          <input type="text" name="email" id="id_email" /><p id="Err2"> </p>
+        </div>
+        <div align="left"> Mobile No:
+          <input type="text" name="phoneno" id="id_phno" /><p id="Err3"> </p>
+        </div>
+        <div align="left"> Password:
+          <input type="password" name="password"  id="id_pswd" /><p id="Err4"> </p>
+        </div>
+        <div align="left">
+          <input name="acceptterms" type="checkbox" value="true" id="Id_CheckBox" />
+          <p> I accept your terms and conditions</p>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer"><a href="#" class="btn btn" onclick="return SubmitValues()">Save</a> <a href="#" class="btn" data-dismiss="modal">Close</a> </div>
+  </div>
+  <script src="/static/js/bootstrap-modal.js"></script>
+</div>
+<script>
+$(document).ready(function(){
+    $(".hoverDiv").hover(function(){
+        $(this).css("background", "#f5f5f5");
+    }, function(){
+        $(this).css("background", "#fff");
+    });
+});
+</script>
+<script>
+function visitorValidation()
+{
+	Mbno = $("#mobileno").val();
+	Mpin = $("#mobilepin").val();
+	is_error = false;
+	if (Mbno == "" || !Mbno)
+	{
+		errmsg = "please login with mobile number and ipin"
+		is_error = true;
+		document.getElementById("ErrorMessage").style.color="red";
+		$("#ErrorMessage").html(errmsg);
+	}
+	if (Mpin == "" || !Mpin)
+	{
+		errmsg = "please login with mobile number and ipin"
+		is_error = true;
+		document.getElementById("ErrorMessage").style.color="red";
+		$("#ErrorMessage").html(errmsg);
+	}
+	if(is_error)
+  	{
+  	return false;
+ 	 }
+    else
+  	{
+  		var query_string = $('#visitorsform').serialize();
+		url = '/visitor-login'
+		post_data = query_string
+		$.post(url,post_data, function(data,status){
+		if(data == "Login Failed")
+		{
+			errmsg = "Invalid login credentials"
+			document.getElementById("ErrorMessage").style.color="red";
+			$("#ErrorMessage").html(errmsg);
+		}
+		if(data=="success")
+		{   
+		    window.location.href = "/get-listings/?page=1";
+            var secondsLabel = document.getElementById("seconds");
+            var totalSeconds = 120;
+            var timer = setInterval(setTime, 1000);
+
+        function setTime()
+        {
+            --totalSeconds;
+            secondsLabel.innerHTML = sec(totalSeconds-1);
+        }
+
+        function sec(val)
+          {
+			 if (val==0)
+		   {
+		   clearInterval(timer);
+		   }
+             return val;
+          }
+		   return true;
+		}
+    	});
+  	}
+}
+</script>
+<script>
+function showDialog()
+{
+	$("#VisitorRegModel").modal('toggle');   
+}
+
+function Close()
+{
+	$("#Dbox").dialog('close');
+}
+
+function SubmitValues()
+{
+	var name = $("#id_name").val()
+	var email = $("#id_email").val()
+	var phno = $("#id_phno").val()
+	var pswd = $("#id_pswd").val()
+	var cbbox = $("#Id_CheckBox").val()
+	var is_error = false;
+	if(!name || name == " ")
+	{
+		errmsg = "Please enter name"
+		is_error = true;
+		document.getElementById("Err1").style.color="red";
+		$("#Err1").html(errmsg);
+	}
+	
+	if(!email || email == " ")
+	{
+		errmsg = "please enter email id"
+		is_error = true;
+		document.getElementById("Err2").style.color="red";
+		$("#Err2").html(errmsg);
+	}
+	
+	if(!phno || phno == "")
+	{
+		errmsg = "please enter mobile no"
+		is_error = true;
+		document.getElementById("Err3").style.color="red";
+		$("#Err3").html(errmsg);
+	}
+	
+	if(!pswd || pswd == "")
+	{
+		errmsg = "please enter password"
+		is_error = true;
+		document.getElementById("Err4").style.color="red";
+		$("#Err4").html(errmsg);
+	}
+	
+	if( $("input:checked").length == 0 )
+	{
+	 	is_error = true;
+        alert("Please accept Terms and conditions");
+    }
+	
+	if(is_error)
+	{
+		return false;
+	}
+	
+	else
+	{
+		var query_string = $('#theForm').serialize();
+		url = '/confirm-code'
+		post_data = query_string
+		$.post(url, post_data, function(data){
+		alert("Your information successfully saved");
+		});
+		$("#VisitorRegModel").modal('hide');
+		return true;
+	}
+
+}
+</script>
+<script src="{{ STATIC_URL }}js/bootstrap.js"></script>
+<script src="{{ STATIC_URL }}js/bootstrap-modal.js"></script>
+
+{% endblock content %}

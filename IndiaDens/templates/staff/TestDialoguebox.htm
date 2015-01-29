@@ -1,0 +1,28 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Untitled Document</title>
+</head>
+<body>
+<input type="button" name="Submit" value="Submit" onClick="DialogBox()" id="id_Submit"/>
+<div id="Dbox" style="display:none">Hi this is Aravind Gajelli<input type="button" name="Submit" value="Cancel" onClick="Close()"/></div>
+</body>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<script>
+function DialogBox()
+{
+	var dialogbox = $("#Dbox").dialog({ autoOpen: false,
+  	height: 400,
+  	width: 350
+	});
+	
+	dialogbox.load('/Staff/callback-request?Custid={{request.session.Customer.customerid}}&listid=2').dialog('open');
+}
+function Close()
+{
+	$("#Dbox").dialog('close');
+}
+</script>
+</html>

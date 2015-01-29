@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="margin-left:20%; margin-right:25%; margin-top:10%">
+  <div class="round-rect" style="width:400px">
+    <form class="form-horizontal" action="callback-requestform" method="post">
+      {% csrf_token %}
+      <legend style="font-size:16px; color:#FF6600">Callback Request Form</legend>
+      <table width="100%" border="0" cellspacing="1" cellpadding="3">
+        <tr>
+          <td> Name </td>
+          <td>{{form.name}}
+            <p id="Err1"></p></td>
+        </tr>
+        <tr>
+          <td>Emailid </td>
+          <td>{{form.email}}
+            <p id="Err3"></p></td>
+        </tr>
+        <tr>
+          <td>Contact Number </td>
+          <td>{{form.phone}}
+            <p id="Err5"></p></td>
+			<td>{{form.CustomerId}}</td>
+			<td>{{form.ListingId}}</td>
+			<td>{{form.ListingType}}</td>
+        </tr>
+        <tr>
+          <td>Preferable Time1</td>
+          <td>{{form.pftime1}}
+            <p id="Err7"></p></td>
+        </tr>
+		<tr>
+          <td>Preferable Time2</td>
+          <td>{{form.pftime2}}
+            <p id="Err7"></p></td>
+        </tr>
+		<tr>
+          <td>Preferable Time3</td>
+          <td>{{form.pftime3}}
+            <p id="Err7"></p></td>
+        </tr>
+        <tr>
+          <td>Message</td>
+          <td>{{form.message}}
+            <p id="Err9"></p></td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td><input name="Submit" type="submit" value="submit" /></td>
+        </tr>
+      </table>
+    </form>
+  </div>
+</div>
+{% endblock content %}

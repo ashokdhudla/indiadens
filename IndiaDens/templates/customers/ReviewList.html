@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+  {% block content %}
+<p>{{msg}}</p>
+<legend style="font-size:16px; color:#FF6600"> Visitor Review List </legend>
+<div style="margin-left:1%;  margin-top:5%" class="round-rect">
+<h4 align="center">{{errmsg}}</h4>
+{%if not errmsg%}
+  <table width="920" border="0" align="center" class="table table-hover" id="tab">
+    <thead>
+      <tr>
+	    <th width="162">Title </th>
+        <th width="162">Name</th>
+        <th width="115">Phone</th>
+        <th width="125">Email</th>
+		<th width="150">Price</th>
+		<th width="150">Comments</th>
+        <th>&nbsp;</th>
+      </tr>
+    </thead>
+    {%for l in review_list%}
+	<tr>
+	  <td>{{l.Listing.title}}</td>
+      <td>{{l.name}}</td>
+      <td>{{l.contactno}}</td>
+      <td>{{l.email}}</td>
+      <td>{{l.bestprice}}</td>
+	  <td>{{l.visitorcomments}}</td>
+      <td><div style="display:none" id="div" align="center">
+          <form  action="/Customer/visitor-reviews" method="post">
+            <input type="hidden" name="reviewid" value="{{l.visitorreviewid}}" />
+            {% csrf_token %}
+            <table width="150" height="28" border="0" align="center" cellpadding="3" cellspacing="1">
+              <tr>
+                <td>Comments</td>
+                 <td>{{form.Sellercomments}}</td>
+              </tr>
+              <tr>
+                <td align="center"><input name="Submit" type="submit" value="submit"/></td>
+              </tr>
+            </table>
+          </form>
+        </div></td>
+    </tr>
+    {%endfor%}
+  </table>
+  {%endif%}
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="../staff/my_jquery_functions.js"></script>
+  <script>
+  $("#tab tr").click(function(){
+       $(this).find('div').slideDown("slow");
+      //$("#div").slideToggle("slow");
+	   });
+</script>
+  {%endblock content%} </div>

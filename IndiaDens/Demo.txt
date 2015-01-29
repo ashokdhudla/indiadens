@@ -1,0 +1,4 @@
+form = ForgetPwdForm(request.POST)
+      if form.is_valid():
+          if form.cleaned_data['recaptcha'] == str(request.session['ReCaptcha']):
+            customer_list = customers.objects.filter(email = form.cleaned_data['email'])

@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="panel" style="width:900px; min-height:400px">
+<br /><br /><br /><br /><br /><div class="round-rect" style="width:400px">
+<form class="form-horizontal" action="login" method="post" id="loginform">
+{% csrf_token %}
+<p align="center" id="error">{{errmsg}}</p>
+<legend style="font-size:16px; color:#FF6600">Staff Login</legend>
+<table width="100%" border="0" cellspacing="1" cellpadding="3">
+  <tr>
+    <td>Email</td>
+    <td><input name="username" type="text" class="form-control" id="inputEmail" placeholder="Email">
+      <span>{{ErrorMessage}}</span></td>
+  </tr>
+  <tr>
+    <td>Password</td>
+    <td><input name="password" type="password" class="form-control" id="inputPassword" placeholder="Password">
+      <span>{{ErrorMessage}}</span></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td><span class="checkbox">
+      <label>
+      <input name="checkbox" type="checkbox">Remember me </label>
+    </span></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td><button type="button" class="btn btn-default" onclick="return Validate()">Sign in</button></td>
+  </tr>
+</table>
+</form>
+</div>
+</div><script>
+function Validate()
+{
+ var x = $("#inputEmail").val();
+ var y = $("#inputPassword").val();
+if(x=="")
+ {
+   $("#error").html("Please Enter Username");
+   $("#inputEmail").focus()
+   document.getElementById("error").style.color="red";
+   return false;
+ }
+else if(y=="")
+ {
+   $("#error").html("Please Enter Password");
+   $("#inputPassword").focus()
+   document.getElementById("error").style.color="red";
+   return false;
+ }
+ else
+  {
+  	var query_string = $('#loginform').serialize();
+  	url = '/Staff/login'
+	post_data = query_string
+
+  	$.post(url, post_data, function(data,status){
+	if(data == "Login Failed")
+	{
+		$("#error").html(data);
+	}
+	else
+	{
+	var target = "/Staff/";
+	window.location.href = target;
+	}
+	return true;	
+  	});
+  }
+
+}
+</script>
+
+{% endblock content %}

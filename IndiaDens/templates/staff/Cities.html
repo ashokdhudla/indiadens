@@ -1,0 +1,55 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>Untitled Document</title>
+</head>
+<body>
+<form name="form" action="" method="get">
+<table width="200" border="3" align="center" cellpadding="1" cellspacing="1" style="display:none">
+  <tr>
+    <td>City</td>
+    <td><input type="text" name="textfield"></td>
+  </tr>
+  <tr>
+    <td>State</td>
+   <td><select name="option">
+     <option value="1">AndhraPradesh</option>
+     <option value="2">Tamilnadu</option>
+	 <option value="3">Karnataka</option>
+	 <option value="4">Kerala</option>
+	 <option value="5">Maharashtra</option>
+   </select></td>
+  </tr>
+  <tr>
+    <td>Mapping City </td>
+	<td><select name="select">
+     <option value="1">Hyderabad</option>
+     <option value="2">Kamareddy</option>
+	 <option value="3">Suryapet</option>
+	 <option value="4">Guntur</option>
+	 <option value="5">Sangareddy</option>
+   </select></td>
+  </tr>
+  <tr><td align="center">
+      <input type="submit" name="Submit" value="Update"></td>
+  </tr>
+</table>
+</form>
+<form name="form1" action="" method="get">
+<table width="200" border="3" align="center" cellpadding="1" cellspacing="1">
+  <tr>
+    <td>City</td>
+	 <td>State</td>
+	 <td>&nbsp;</td>
+  </tr>
+  {% for obj in cities %}
+  <tr>
+  <td>{{obj.name}}</td>
+  <td>{{obj.State.name}}</td>
+  <td><input type="submit" name="edit" value="Edit"></td>
+  </tr>
+  {% endfor %}
+  </table>
+</form>
+</body>
+</html>

@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+  {% block content %}
+<p align="center" class="style1">{{Errmsg}}</p>
+<table width="929" border="0" cellspacing="0" cellpadding="0" align="center">
+  <tr bgcolor="#CCCCFF">
+    <td width="88"><div align="center">PropertyId</div></td>
+    <td width="104"><div align="center">Property Type </div></td>
+    <td width="220"><div align="center">Title</div></td>
+    <td width="107"><div align="center">Price</div></td>
+    <td width="118"><div align="center">Address</div></td>
+    <td width="136"><div align="center">City </div></td>
+    <td width="66">&nbsp;</td>
+    <td width="72">&nbsp;</td>
+  </tr>
+  {% for clist in CustomersList %}
+  <tr>
+    <td align="center">{{clist.propertyid}}</td>
+    <td align="center">{{clist.propertytypeid}}</td>
+    <td align="center">{{clist.title}}</td>
+    <td align="center">{{clist.price}}</td>
+    <td align="center">{{clist.address}}</td>
+    <td align="center">{{clist.City.name}}</td>
+    <td>
+      <div align="center">
+        <input type="submit" name="Submit" value="Edit" onclick="Edit({{clist.listingid}},{{typeid}})" class="btn btn-mini btn-info""/>
+      </div></td>
+    <td><div align="center">
+      <input type="submit" name="Submit" value="Delete" onclick="Delete({{clist.listingid}},{{typeid}})" class="btn btn-mini btn-danger"/>
+    </div></td>
+  </tr>
+  {% endfor %}
+</table>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+</script>
+<script>
+function Edit(lid,type)
+{
+	var url ='listing-form?listid=' +lid+ '&type=' +type+ '&prevpage=' +customer-listings
+	window.location.href = url
+}
+</script>
+<script>
+function Delete(lid,type)
+{
+	alert("Are you sure? \n You want to delete?");
+	var url = 'ListDelele?listid=' + lid + '&type='+ type;
+	window.location.href=url
+}
+</script>
+{% endblock content %}

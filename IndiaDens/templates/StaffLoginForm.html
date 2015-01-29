@@ -1,0 +1,59 @@
+<html>
+<style type="text/css">
+<!--
+.style1 {
+	font-weight: bold;
+	color: #DF0000;
+}
+-->
+</style>
+{% extends "base.html" %} {% block content %} 
+<form name="form1" method="post" action="/staffloginform">
+  <p>{% csrf_token %}
+  </p>
+  <p align="center" id="ErrorMessage" class="style1">{{ErrorMessage}}</p>
+    <table width="291" height="106" border="0" align="center" cellpadding="1" cellspacing="1" bgcolor="#FFFFFF">
+    <tr bgcolor="#E4F1F3">
+      <td colspan="2" bgcolor="#FFFFFF"><img src="/static/images/stafflogin.jpg" border="0" /></td>
+    </tr>
+    <tr bgcolor="#E4F1F3">
+      <td   width="144">UserName </td>
+      <td  id="username" width="141">{{Sform.UserName}}</td>
+    </tr>
+    <tr bgcolor="#E4F1F3">
+      <td  >Password</td>
+      <td id="password" bgcolor="#E4F1F3">{{Sform.Password}}</td>
+    </tr>
+    
+    <tr>
+      <td height="28" bgcolor="#E4F1F3">&nbsp;</td>
+      <td bgcolor="#E4F1F3"><input type="submit" name="Submit" value="Login" onClick="return GetFocus()"></td>
+    </tr>
+  </table>
+</form>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>
+  function GetFocus()
+  {
+  	var err = "";
+     x = +$("#username").val();
+	 y = +$("#password").val();     
+	if (x == "")
+      {
+		$("#ErrorMessage").html("<p></p>");
+		$("#username").focus();
+		}
+	else if(y == "")
+	    {
+	      $("#ErrorMessage").html("<p></p>");
+		  $("#password").focus();
+		}
+		else
+		{
+		alert("hello");
+	   return true;
+	  }
+  }
+</script>
+</html>
+{%endblock%}

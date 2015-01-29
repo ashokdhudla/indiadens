@@ -1,0 +1,27 @@
+{% extends 'base-home.html' %}
+{% block content %}
+<style type="text/css">
+<!--
+.style4 {
+	font-size: large;
+	color: #990000;
+}
+.style5 {
+	font-size: large;
+	font-weight: bold;
+	color: #663399;
+}
+-->
+</style>
+
+<div style="text-align:right; width:100%">Add <a href="new-listing?type=1">Rental</a> or <a href="new-listing?type=2">Sale</a> listings</div>
+<div class="round-rect" style="width:800px" align="left">
+<legend style="font-size:16px; color:#FF6600">Listing Status</legend>
+<p>Thank you for choosing IndiaDens.com.  </p>
+<p>We found that, you are already a registered user in our database.<br />
+  The listing information is successfully recorded but it requires your approval.
+</p>
+<p>Kindly login into your account with the EMail ID: {{EMailID}} and approve the listing(s)</p>
+<p>If you forgot the password, please <a href="/Customer/login">click</a> here to resend your credentials to {{EMailID}}</p>
+</div>
+{% endblock content %}

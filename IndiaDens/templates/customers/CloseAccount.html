@@ -1,0 +1,39 @@
+{% extends 'base-home.html' %}
+{% block content %}
+<div style="margin-left:20%; margin-right:25%; margin-top:10%">
+<div class="round-rect" style="width:400px">
+<form class="form-horizontal" method="post" action="close-account" id="id_CloseAccount">
+{% csrf_token %}
+<legend style="font-size:16px; color:#FF6600">Account Termination Request </legend>
+<table width="600" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="62%"> Please give us the feed back or reason for closing. </td>
+  </tr>
+  <tr>
+  <td width="38%"> <textarea name="feedback" class="form-control" id="inputFeedback"> </textarea> </td>
+  </tr>
+  <tr>
+    <td> <button type="submit" class="btn btn-default" onclick="return confirm('Are you sure you want to close your subscription ?')"> Confirm </button> </td>
+  </tr>
+</table>
+<div align="center" class="style1"></div>
+</form>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+</script>
+<script>
+function confirm()
+{
+	if( option == true)
+	{
+	 	
+		return true;
+	}
+	else
+	{
+	return false;
+	}
+}
+</script>
+</div>
+</div>
+{% endblock content %}

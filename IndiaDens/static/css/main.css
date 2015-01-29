@@ -1,0 +1,189 @@
+body {
+    background-color: #eeeeef;
+}
+
+#logo {
+    width: 200px;
+    height: 40px;
+    margin-right: 20px;
+    margin-left: 0;
+    padding: 0;
+    background: transparent url(/static/images/Logo.gif) no-repeat 50% 50%;
+    
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.navbar-inverse #logo {
+    background-image: url(../img/logo-white-new.png);
+}
+
+.error {
+    color: red;
+    font-size: 0.8em;
+}
+
+.container-fluid {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+    margin-bottom: 20px;
+}
+
+    .header h1 a {
+        background: transparent url(../img/logo-blue-new.png) no-repeat top left;
+        display: block;
+        width: 251px;
+        height: 50px;
+        
+        text-indent: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+.panel
+{
+    padding: 19px 29px 19px;
+    margin: 0 auto 20px;
+    background-color: #fff;
+}    
+
+
+.round-rect
+{
+    padding: 19px 29px 19px;
+    margin: 0 auto 20px;
+    background-color: #fff;
+    border: 1px solid #e5e5e5;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+       -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+            box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}    
+
+.round-border
+{
+    padding: 19px 29px 19px;
+    margin: 0 auto 20px;
+    border: 1px solid #e5e5e5;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+       -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+            box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}    
+
+.round-border-nopadding
+{
+    margin: 0 auto 20px;
+    border: 1px solid #e5e5e5;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+       -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+            box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}    
+
+.form-login,
+.form-register {
+    max-width: 300px;
+    padding: 19px 29px 19px;
+    margin: 0 auto 20px;
+    background-color: #fff;
+    border: 1px solid #e5e5e5;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+       -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+            box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}
+
+.form-profile {
+    padding: 19px 29px 19px;
+    background-color: #fff;
+    border: 1px solid #e5e5e5;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+       -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+            box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}
+
+.form-login input[type="password"] {
+    margin-bottom: 4px;
+}
+
+.label-inline {
+    display: block;
+    padding: 10px 0;
+}
+
+    .label-inline input {
+        margin: 0;
+    }
+    
+.form-controls {
+    border-top: 1px solid #e5e5e5;
+    margin-top: 10px;
+    padding-top: 10px;
+}
+
+.form-link {
+    display: inline-block;
+    font-size: 0.9em;
+    margin-left: 1em;
+}
+
+.form-footer {
+    color: #999;
+    display: block;
+    font-size: 0.8em;
+    margin: 20px 0 0 0;
+    text-align: center;
+}
+
+.link-reset {
+    font-size: 0.9em;
+}
+
+td.text-right {
+    text-align: right;
+}
+
+.dataTable {
+    border: 1px solid #ccc;
+    border-width: 0 1px;
+}
+
+.fotercenter {
+	background:url(/static/images/centerfoter.jpg) #ffffff top repeat-x;
+}
+
+.lt1 { background:url(/static/images/lt-1.gif) no-repeat; width:20px; height:15px}
+.lt2 { background:url(/static/images/lt-2.gif) no-repeat; width:20px; height:15px}
+.topbg{ background:url(/static/images/top-bg.gif) repeat-x; mix-width:20px; height:15px}
+
+.leftbg { background:url(/static/images/leftbg.gif) repeat-y; min-width:20px; min-height:15px}
+.rightbg { background:url(/static/images/rightbg.gif) repeat-y; mix-width:20px; min-height:15px}
+
+.rt-1 { background:url(/static/images/rt-1.gif) no-repeat; width:20px; height:15px}
+.rt-2 { background:url(/static/images/rt-2.gif) no-repeat; width:20px; height:15px}
+.bott-bg{ background:url(/static/images/bottombg.gif) repeat-x; min-width:20px; height:15px}
+
+
+
+.autocomplete-suggestions { border: 1px solid #999; background: #FFF; cursor: default; overflow: auto; -webkit-box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64); -moz-box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64); box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64); }
+.autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
+.autocomplete-selected { background: #F0F0F0; }
+.autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }

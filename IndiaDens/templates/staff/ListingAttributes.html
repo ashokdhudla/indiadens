@@ -1,0 +1,31 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>Untitled Document</title>
+</head>
+<body>
+<form name="form1" method="post" action="listing-attributes">
+  {%csrf_token%}
+    <table width="328"  align="center">
+      <tr>
+        <th width="166">NAME</th>
+        <th width="150">VALUE</th>
+      </tr>
+    </table>
+  <table align="center"><tr>
+      <td width="100"><table width="100%" border="3" cellspacing="1" cellpadding="1">
+          <tr>
+            <td><input type="text" name="Name-{{forloop.counter}}" value="{{Obj.name}}"></td>
+            <td><textarea name="Value-{{forloop.counter}}" value="{{Obj.value}}"></textarea></td>
+            <td><input type="hidden" name="AttributeID-{{forloop.counter}}" value="{{Obj.attributeid}}"></td>
+          </tr>
+        </table></td>
+    </tr>
+    {% endfor %}
+  </table>
+  <p align="center">
+    <input type="submit" name="Submit" value="Save">
+  </p>
+</form>
+</body>
+</html>

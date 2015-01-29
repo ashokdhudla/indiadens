@@ -1,0 +1,27 @@
+<style type="text/css">
+<!--
+.style4 {
+	font-size: large;
+	color: #990000;
+}
+.style5 {
+	font-size: large;
+	font-weight: bold;
+	color: #663399;
+}
+-->
+</style>
+{% extends 'base-home.html' %}
+{% block content %}
+<div style="text-align:right; width:100%">Add <a href="new-listing?type=1">Rental</a> or <a href="new-listing?type=2">Sale</a> listings</div>
+<div class="round-rect" style="width:800px">
+<legend style="font-size:16px; color:#FF6600">Registration Status</legend>
+<p>Thank you for choosing IndiaDens.com.
+  Your registration is success. <br />
+  We need to verify your mobile to active  listings.  </p>
+<p>Your confirmation code is  <span class="style5">{{ConfirmationCode}}</span> </p>
+<p>Please send this number  to <span class="style4">8978028038
+</span>within 48 hours. </p>
+<p>Once you have confirmed your mobile number, You will get an auto generated email containing Login Credentials.</p>
+</div>
+{% endblock content %}

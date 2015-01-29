@@ -1,0 +1,350 @@
+{% extends 'base-home.html' %}
+{% block content %}
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
+<style type="text/css">
+<!--
+.addresscolor {
+	color: #633;
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 12px;
+}
+.price {color: #FF3300}
+.style2 {color: #000066}
+.style4 {
+	color: #663333;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-weight: bold;
+}
+.style10 {font-size: 10}
+.style25 {font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; color: #006633; }
+.style26 {font-family: Verdana, Arial, Helvetica, sans-serif}
+      #map_canvas {
+        width: 800px;
+        height: 400px;
+      }
+.jscall {
+    color: #0099FF;
+	cursor: pointer;
+	}
+
+-->
+</style>
+<style>
+body {font-family:Arial, Helvetica, sans-serif; font-size:12px;}
+
+.fadein { 
+position:relative; height:300px; width:300px; margin:0 auto;
+background: url("slideshow-bg.png") repeat-x scroll left top transparent;
+padding: 10px;
+ }
+.fadein img { position:absolute; left:10px; top:10px; }
+</style>
+<script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script>
+      function DrawMap(lat, long, pTitle) {
+	    var myLatlng = new google.maps.LatLng(lat, long)
+        var map_canvas = document.getElementById('map_canvas');
+        var map_options = {
+          center: myLatlng,
+          zoom: 15,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        }
+        var map = new google.maps.Map(map_canvas, map_options);
+
+		var marker = new google.maps.Marker({
+          position: myLatlng,
+          map: map,
+          title: pTitle
+        });		
+      }
+    </script>
+</p>
+
+<!-- Begin Round Rect -->
+<table width="800px" cellpadding="0" cellspacing="0" align="center">
+  <tr>
+    <td class="lt1">&nbsp;</td>
+    <td class="topbg">&nbsp;</td>
+    <td class="rt-1">&nbsp;</td>
+  </tr>
+  <tr>
+    <td class="leftbg">&nbsp;</td>
+    <td valign="top" height="600px"><!-- Begin Iteration -->
+	<table width="100%" border="0" cellspacing="1" cellpadding="3">
+  <tr>
+    <td width="82%">{{title}}</td>
+    <td width="18%"><span class="price">Rs. 10,000</span></td>
+  </tr>
+  <tr>
+    <td colspan="2"><table width="100%" border="0" cellspacing="1" cellpadding="2">
+      <tr>
+        <td width="300px"><div class="fadein"> {%for i in image_list%} {%if i.listingimageid != 0%}<img class="img" src="{{IMAGE_URL}}{{i.largeimage}}" height="300px" width="300px"> {%else%}<img src="{{IMAGE_URL}}{{image}}" height="300px" width="300px" />{%endif%}{%endfor%} </div></td>
+        <td width="73%" align="left" valign="top"></div>
+          <table width="100%" border="0">
+            <tr>
+              <td width="56%"><table width="100%" border="0" cellspacing="1" cellpadding="3">
+                <tr>
+                  <td width="29%" bgcolor="#ECF7FF">Property Type </td>
+				  {%if ptype == 10 %}
+					<td class="style10"><span class="style25"> Apartements </span></td>
+					{%elif ptype == 20 %}
+					<td class="style10"><span class="style25"> Individual Home </span></td>
+					{%elif ptype == 30 %}
+					<td class="style10"><span class="style25"> Villa </span></td>
+					{%elif ptype == 40 %}
+					<td class="style10"><span class="style25"> Pent House </span></td>
+					{%elif ptype == 50 %}
+					<td class="style10"><span class="style25"> Farm House</span></td>
+					{%elif ptype == 60 %}
+					<td class="style10"><span class="style25"> Office Space </span></td>
+					{%elif ptype == 100 %}
+					<td class="style10"><span class="style25"> Residential Land </span></td>
+					{%elif ptype == 110 %}
+					<td class="style10"><span class="style25"> Commercial Land </span></td>
+					{%endif%}
+                </tr>
+                <tr bgcolor="#FFFAF4">
+                  <td>Bed rooms</td>
+                  <td bgcolor="#FFF7EA" colspan="2"><span class="style25">{{BedRooms}}</span></td>
+                </tr>
+                <tr bgcolor="#ECF7FF">
+                  <td> Bathrooms</td>
+                  <td colspan="3"><span class="style25">{{BathRooms}}</span></td>
+                </tr>
+                <tr bgcolor="#FFFAF4">
+                  <td>Area</td>
+                  {% if areaunit == 1%}
+					<td class="style10"><span class="style25">{{area}}Sq ft</span></td>
+					{%elif areaunit == 2 %}
+					<td class="style10"><span class="style25">{{area}}Sq Mt </span></td>
+					{%elif areaunit == 3 %}
+					<td class="style10"><span class="style25">{{area}}Sq yd </span></td>
+					{%elif obj.areaunit == 4%}
+					<td class="style10"><span class="style25">{{area}}Acres </span></td>
+				{%endif%}
+                </tr>
+                <tr bgcolor="#ECF7FF">
+                  <td>Construction Year </td>
+                  <td colspan="3">{{constructionyear}} </td>
+                </tr>
+                <tr bgcolor="#FFFAF4">
+                  <td>Possession</td>
+                  <td>{{possession}}</td>
+                </tr>
+              </table></td>
+              <td width="44%" valign="top"><table width="100%" border="0">
+                <tr>
+                  <td bgcolor="#F4EBE1">Title:{{title}}</td>
+                </tr>
+                <tr>
+                  <td bgcolor="#EFEFEF">Name:{{contactname}}</td>
+                </tr>
+                <tr>
+                  <td>EMail:{{email}}</td>
+                </tr>
+                <tr>
+                  <td>Phone:{{phone}}</td>
+                </tr>
+                <tr>
+                  <td align="center"><input type="button" name="button2" id="button2" value="Requst for Call Back" class="btn btn-primary" style="width:160px" onclick="showDialog()" /></td>
+                </tr>
+                <tr>
+                  <td align="center"><input type="button" name="button" id="button" value="Suggest Best Price" class="btn btn-primary" style="width:160px" /></td>
+                </tr>
+              </table></td>
+            </tr>
+            <tr>
+              <td colspan="2">{% if lift == 1%}Lift,{%endif%}{% if gym == 1%} Gym,{%endif%} {% if swimmingpool == 1%} Swimming Pool,{%endif%}  
+			  {% if gatedcommunity == 1%}  Gated Community,{%endif%}, 
+			  {% if powerbackup == 1%}Power Backup:No {%endif%}
+			   {%if powerbackup == 2%}Power BackUp:Semi{%endif%} 
+			   {%if powerbackup == 3%}Power BackUp:Full{%endif%},
+			   {%if furnished == 1%}Furnished:No{%endif%}
+			   {%if furnished == 2%}Furnished:Semi{%endif%}
+			   {%if furnished == 3%}Furnished:Full{%endif%}, 
+			   {%if facing == 1%}Facing:East{%endif%}
+			   {%if facing == 2%}Facing:West{%endif%}
+			   {%if facing == 3%}Facing:North{%endif%}
+			   {%if facing == 4%}Facing:South{%endif%}
+			  </td>
+              </tr>
+          </table></td>
+      </tr>
+      
+    </table></td>
+  </tr>
+  <tr>
+    <td class="addresscolor" colspan="2">Address: {{address}} (<span style="cursor:pointer; color:#006" onclick="ShowMap({{Latitude}}, {{Longitude}}, '{{MapPointerTitle}}')">Map View</span>)</td>
+  </tr>
+  <tr>
+    <td class="addresscolor" colspan="2">Land Marks: {{landmark1}} {{landmark2}} {{landmark3}} {{landmark4}}.</td>
+  </tr>
+  <tr>
+    <td colspan="2"><div id="map_canvas" style="display:none" class="round-rect">Loading Map....</div><br />
+    Property Information</td>
+  </tr>
+  <tr>
+    <td colspan="2">{{description}}</td>
+  </tr>
+  <tr>
+    <td colspan="2">Other Information</td>
+  </tr>
+  {%for obj in Attr_List%}
+ 	 <tr>
+        <td width="12%">{{obj.name}}</td>
+        <td width="88%">{{obj.value}}</td>
+      </tr>
+	{%endfor%}
+    </table></td>
+  </tr>
+    </table>
+
+	      <!-- End Iteration -->
+    </td>
+    <td class="rightbg">&nbsp;</td>
+  </tr>
+  <tr>
+    <td class="lt2">&nbsp;</td>
+    <td class="bott-bg">&nbsp;</td>
+    <td class="rt-2">&nbsp;</td>
+  </tr>
+</table>
+<div class="container">
+  <div id="CallBackReqModel" class="modal hide fade in" style="display: none; ">
+    <div class="modal-header" align="left"> <a class="close" data-dismiss="modal">x</a>
+      <h5>CallBack Request Form</h5>
+    </div>
+    <div class="modal-body" align="left">Submit a call back request we will call you as soon as possible.
+      <form action="callback-requestform" method="post" id="CbrForm">
+        {%csrf_token%}
+        <div align="left"> Name:
+          <input type="text" name="name" id="id_name"/><p id="Err1"> </p>
+        </div>
+        <div align="left"> Email:
+          <input type="text" name="email" id="id_email"/><p id="Err2"> </p>
+        </div>
+        <div align="left"> Contact No:
+          <input type="text" name="phoneno" id="id_phno"/><p id="Err3"> </p>
+		  <input type="hidden" name="customerid" value="{{CustomerId}}"/>
+		  <input type="hidden" name="listingid" value="{{ListingId}}"/>
+		  <input type="hidden" name="listingtype" value="{{ListingType}}"/>
+        </div>
+        <div align="left"> Pref-Time1: 
+          <input type="text" name="pftime1"  id="id_pftime1" class="input-mini"/> &nbsp;
+		  Pref-Time2:<input name="pftime2" type="text" id="id_pftime2" class="input-mini"/>&nbsp;
+		  Pref-Time3:<input name="pftime3" type="text" id="id_pftime3" class="input-mini"/>&nbsp;
+		  <p id="Err4" align="left"> </p>
+      </div>
+		<div align="left"> Message:
+          <textarea name="message" id="msg"></textarea>
+        </div>
+      </form>
+    </div>
+	<div class="modal-footer"> <a href="#" class="btn btn" onclick="return RequestSubmit()">Save</a> <a href="#" class="btn" data-dismiss="modal">Close</a> </div>
+  </div>
+</div>
+<script>
+function ShowMap(pLatitude, pLongitude, pTitle)
+{
+  $("#map_canvas").slideToggle(function () {
+      if (!$("#map_canvas").is(":hidden"))
+	  {
+        DrawMap(pLatitude, pLongitude, pTitle);
+	  }
+    }
+   );
+}
+
+</script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<script src="/static/js/bootstrap-modal.js"></script>
+<script>
+
+function showDialog()
+{
+	$("#CallBackReqModel").modal('toggle');   
+}
+
+function Close()
+{
+	$("#Dbox").dialog('close');
+}
+
+function RequestSubmit()
+{
+    var name = $("#id_name").val();
+	var email = $("#id_email").val();
+	var phno = $("#id_phno").val();
+	var time1 = $("#id_pftime1").val();
+	is_error = false;
+	
+	if(name=="" || !name)
+ 	{
+		is_error = true;
+   		$("#Err1").html("Please Enter Your name");
+   		$("#id_name").focus()
+   		document.getElementById("Err1").style.color="red";
+	}
+	
+ 	if(email=="" || !email)
+ 	{
+		is_error = true;
+   		$("#Err2").html("Please Enter Email");
+   		$("#id_email").focus()
+   		document.getElementById("Err2").style.color="red";
+ 	}
+	
+	if(phno=="" || !phno)
+	{
+	   $("#Err3").html("Please Enter Phone number");
+	   $("#id_phone").focus()
+	   document.getElementById("Err3").style.color="red";
+	   is_error = true;
+	}
+	
+	if(time1=="" || !time1)
+	{
+	   $("#Err4").html("Please Enter preferable time");
+	   $("#id_pftime1").focus()
+	   document.getElementById("Err4").style.color="red";
+	   is_error = true;
+	}
+	if(is_error)
+	{
+		return false;
+	}
+	else
+	{
+		var query_string = $('#CbrForm').serialize();
+		url = '/callback-requestform'
+		post_data = query_string;
+		alert
+		$.post(url, post_data, function(data){
+		  if(data == "request taken")
+		  {
+			  alert("Your request has been submitted successfully");
+		  }
+		 });	
+		 $("#CallBackReqModel").modal('hide');
+		 return true;
+		
+	}
+}
+
+</script>
+
+<script>
+	$(function(){
+	$('.fadein img:gt(0)').hide();
+	setInterval(function(){$('.fadein :first-child').fadeOut().next('img').fadeIn().end().appendTo('.fadein');}, 3000);
+   });
+</script>
+
+{% endblock %} 

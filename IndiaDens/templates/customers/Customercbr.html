@@ -1,0 +1,83 @@
+<div class="modal-header" align="left">
+  <h5>Call Back Request</h5>
+</div>
+<div class="modal-body" align="left">
+  <form action="ajaxcallback-requests" method="post" id="theForm">
+    {%csrf_token%}
+    <table width="600" border="0">
+        <tr>
+          <td><table width="600" border="0" bgcolor="#F5F5F5" cellspacing="1" cellpadding="3">
+              <tr bgcolor="#F2F8FF">
+			    <input type="hidden" name="cbrid" value="{{cbrid}}">
+                <td width="243">{{cbrobj.name}}</td>
+                <td width="133">{{cbrobj.phone}}</td>
+                <td width="202">{{cbrobj.email}}</td>
+              </tr>
+              <tr bgcolor="#FFFAEC">
+                <td colspan="3">Prefferable Times: {{cbrobj.pretime1}},{{pretime2}},{{pretime3}}</td>
+              </tr>
+              <tr bgcolor="#F9F9F9">
+                <td colspan="3">{{message}}</td>
+              </tr>
+              <tr bgcolor="#F9F9F9">
+                <td>Call Status</td>
+                <td><label for="ddlStatus"></label>
+                    <select name="ddlStatus" id="ddlStatus">
+                      <option value="0" selected="selected">Select</option>
+                      <option value="1">Attended</option>
+                      <option value="2">Line Busy</option>
+                      <option value="3">Invalid Number</option>
+                      <option value="4">Closed</option>
+                  </select></td>
+                <td><input type="submit" name="cmdSave" id="cmdSave" value="Save" /></td>
+              </tr>
+          </table></td>
+        </tr>
+        <tr>
+          <td><table width="600" border="1" bordercolor="#F5F5F5">
+              {%for obj in cbr%}
+			  <tr>
+                <td width="257"><a href="/listing-info?lid={{obj.listingid}}&amp;type={{ListingType}}" target="_blank"><img src="{{IMAGE_URL}}{{obj.imagethumb}}" alt="" width="200px" height="200px" /></a></td>
+                <td width="281"><div>Title:{{obj.title}}</div>
+				{%if obj.propertytypeid == 10 %}
+                     <div>Property Type:Apartment </div>
+				{%elif obj.propertytypeid == 20 %}
+					<div>Property Type:Individual Home </div>
+				{%elif obj.propertytypeid == 30 %}
+					<div>Property Type:Villa </div>
+				{%elif obj.propertytypeid == 40 %}
+					<div>Property Type:Pent House </div>
+				{%elif obj.propertytypeid == 50 %}
+					<div>Property Type:Farm House </div>
+				{%elif obj.propertytypeid == 60 %}
+					<div>Property Type:Office Space </div>
+				{%elif obj.propertytypeid == 100%}
+					<div>Property Type:Residential Land </div>				
+				%if obj.propertytypeid ==110 %}
+					<div>Property Type:Commercial Land </div>
+				{%endif%}
+				{% if obj.areaunit == 1%}
+                    <div>Area:{{obj.area}} Sq Ft</div>
+				  {%elif obj.areaunit == 2%}
+				      <div>Area:{{obj.area}} Sq MT</div>
+				    {%elif obj.areaunit == 3%}
+					  <div>Area:{{obj.area}} Sq Mt</div>
+					{%elif obj.areaunit == 4 %}
+					  <div>Area:{{obj.area}} Acres</div>
+					{%endif%}
+                  <div>Bedrooms:{{obj.bedrooms}}</div>
+                  <div>Bathrooms:{{obj.bathrooms}}</div>
+                <div>Location:{{obj.address}}</div></td>
+                <td width="40">Price:{{obj.price}}</td>
+              </tr>
+			  {%endfor%}
+              <tr>
+                <td><a href="/listing-info?lid={{obj.listingid}}&amp;type={{ListingType}}" target="_blank"></a></td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+              </tr>
+          </table></td>
+        </tr>
+      </table>
+  </form>
+</div>

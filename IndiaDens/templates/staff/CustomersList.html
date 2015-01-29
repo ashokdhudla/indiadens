@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    #custom-search-form {
+        margin:0;
+        margin-top: 5px;
+        padding: 0;
+    }
+ 
+    #custom-search-form .search-query {
+        padding-right: 3px;
+        padding-right: 4px \9;
+        padding-left: 3px;
+        padding-left: 4px \9;
+        /* IE7-8 doesn't have border-radius, so don't indent the padding */
+ 
+        margin-bottom: 0;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+    }
+ 
+    #custom-search-form button {
+        border: 0;
+        background: none;
+        /** belows styles are working good */
+        padding: 2px 5px;
+        margin-top: 2px;
+        position: relative;
+        left: -28px;
+        /* IE7-8 doesn't have border-radius, so don't indent the padding */
+        margin-bottom: 0;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+    }
+ 
+    .search-query:focus + button {
+        z-index: 3;   
+    }
+</style>
+<div style="margin-left:1%;  margin-top:5%" class="round-rect">
+<form action="customer-list" method="post" class="form-search form-horizontal">
+{% csrf_token %}
+<h4 style="font-size:16px; color:#FF6600; margin-top:1%" class="pull-left">CUSTOMERS</h4>
+<div class="input-append  pull-right" style="margin-top:1%"><input type="text" name="SearchCustomer" class="search-query" placeholder="Search"/><button type="submit" class="btn btn-mini"><i class="icon-search"></i></button></div>
+</form>
+<table width="100%" border="0" align="center" cellpadding="3" cellspacing="1" bgcolor="#F4F4F4">
+  <tr  bgcolor="#FFFEF9" >
+    <td width="194" bgcolor="#CCCCCC">Customer Name </td>
+    <td width="107" bgcolor="#CCCCCC">Contact Number </td>
+    <td width="73" bgcolor="#CCCCCC">EMail</td>
+    <td width="98" bgcolor="#CCCCCC">Address</td>
+	<td width="98" bgcolor="#CCCCCC">City</td>
+	<td width="98" bgcolor="#CCCCCC">State</td>
+	<td width="98" bgcolor="#CCCCCC">Active</td>
+    <td width="24" bgcolor="#CCCCCC">&nbsp;</td>
+    <td bgcolor="#CCCCCC">&nbsp;</td>
+    <td bgcolor="#CCCCCC">&nbsp;</td>
+  </tr>
+  {% for c in cust_list %}
+  {% if forloop.counter|divisibleby:"2" == 0 %}
+  <tr  bgcolor="#FFFEF9" > {% endif %}
+    <td>{{c.firstname}}&nbsp;{{c.lastname}}</td>
+    <td>{{c.phone}}</td>
+    <td>{{c.email}}</td>
+	<td>{{c.address}}</td>
+	<td>{{c.City.name}}</td>
+	<td nowrap="nowrap">{{c.State.name}}</td>
+    {%if c.isenabled = 0%}<td> InActive{%elif c.isenabled = 1 %}Active</td>{%endif%}
+    <td style="width:80px"><input type="submit" name="Submit" value="Edit" onclick="Edit({{c.customerid}})" class="btn btn-info btn-mini"/></td>
+    <td style="width:100px"><input type="submit" name="Submit2" value="Delete" onclick="Delete({{c.customerid}})" class="btn btn-danger btn-mini"/></td>
+  </tr>
+  {% endfor %}
+</table>
+</div>
+<div class="pagination" align="center">
+    <span class="step-links">
+        {% if cust_list.has_previous %}
+            <a href="?page={{ cust_list.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ cust_list.number }} of {{ cust_list.paginator.num_pages }}
+        </span>
+
+        {% if cust_list.has_next %}
+            <a href="?page={{ cust_list.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+</script>
+<script>
+function Edit(cid)
+{
+  var url = '/Customer/customer-form?cid='+cid;
+  window.location.href=url;
+}
+</script>
+<script>
+function Delete(cid)
+{
+	option = confirm("Are you sure? You want to delete?");
+	if (option)
+	{
+	  var url = 'customer-delete?customerid=' + cid;
+	  window.location.href=url
+	}
+}
+function SaleListings(cid)
+{
+	var url = 'customer-salelistings?customerid=' + cid;
+	window.location.href=url
+}
+function RentalListings(cid)
+{
+	var url = 'customer-rentallistings?customerid=' + cid;
+	window.location.href=url
+}
+</script>
+{% endblock %} 

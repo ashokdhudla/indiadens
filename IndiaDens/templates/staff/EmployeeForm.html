@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="margin-left:20%; margin-right:25%; margin-top:10%">
+  <div class="round-rect" style="width:400px">
+    <form class="form-horizontal" enctype="multipart/form-data" action="employee-form" method="post">
+      {% csrf_token %}
+	  <input type="hidden" name="eid" value="{{eid}}" />
+	  <input type="hidden" name="role" value="{{role}}" />
+	  <input type="hidden" name="role1" value="{{role1}}" />
+      <p align="center" id="error">{{errmsg}}</p>
+      <legend style="font-size:16px; color:#FF6600">Employee Registration </legend>
+      <table width="100%" border="0" cellspacing="1" cellpadding="3">
+        <tr>
+          <td>First Name </td>
+          <td>{{form.firstname}}
+            <p id="Err1"></p></td>
+        </tr>
+        <tr>
+          <td >Last Name </td>
+          <td>{{form.lastname}}
+            <p id="Err2"></p></td>
+        </tr>
+        <tr>
+          <td>Emailid </td>
+          <td>{{form.emailid}}
+            <p id="Err3"></p></td>
+        </tr>
+        <tr>
+          <td>Password </td>
+          <td>{{form.loginpwd}}
+            <p id="Err4"></p></td>
+        </tr>
+        <tr>
+          <td>Contact Number </td>
+          <td>{{form.contactno}}
+            <p id="Err5"></p></td>
+        </tr>
+        <tr>
+          <td>Address</td>
+          <td>{{form.address}}
+            <p id="Err7"></p></td>
+        </tr>
+        <tr>
+          <td>City </td>
+          <td> {{form.City}}<p id="Err6">
+               <input type="hidden" name="city" id="id_City-x" style="color: #CCC; position: absolute; background: transparent; z-index: 1;"/>
+		 {{form.CityID.as_hidden}} </p></td>
+        <tr>
+          <td>State</td>
+          <td>{{form.state}}
+            <p id="Err9"></p></td>
+        </tr>
+        <tr>
+          <td>Photo</td>
+          <td><input type="file" name="Imagefile" /></td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td><input name="Submit" type="submit" value="submit" onclick="return employeeValidate()"/></td>
+        </tr>
+      </table>
+    </form>
+  </div>
+</div>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+ <script type="text/javascript" src="/static/js/jquery.mockjax.js"></script>
+<script type="text/javascript" src="/static/js/jquery.autocomplete.js"></script>
+<script src="/static/js/cities.js"></script>
+<script>
+function employeeValidate()
+{
+ var a = $("#id_firstname").val();
+ var b = $("#id_lastname").val();
+ var c = $("#id_emailid").val();
+ var d = $("#id_loginpwd").val();
+ var e = $("#id_contactno").val();
+ var g = $("#id_address").val();
+ var h = $("#id_city").val();
+ var i = $("#id_state").val();
+ is_error=false; 
+   if(a == "")
+	 {
+       errmsg = "Please Enter Firstname";
+	   is_error = true;  
+	   document.getElementById("Err1").style.color="red";
+	   $("#Err1").html(errmsg);
+	   $("#id_firstname").focus();
+	 }
+	if(b == "")
+	 {
+	   errmsg = "Please Enter Lastname";
+	   is_error = true; 
+	   document.getElementById("Err2").style.color="red";
+	   $("#Err2").html(errmsg);
+	   $("#id_lastname").focus();
+	  }
+	
+
+	if(c == "")
+	 {
+	   errmsg = "Please Enter Emailid";
+	   is_error = true; 
+	   document.getElementById("Err3").style.color="red";
+	   $("#Err3").html(errmsg);
+	   $("#id_emailid").focus();
+	  }
+
+	if (d == "")
+	 {
+	   errmsg = "Please Enter Password";
+	   is_error = true; 
+	   document.getElementById("Err4").style.color="red";
+	   $("#Err4").html(errmsg);
+	   $("#id_loginpwd").focus();
+	 }
+
+
+
+	if (e == "")
+	   {
+	     errmsg = "Please Enter Contact Number";
+	   	 is_error = true;
+		 document.getElementById("Err5").style.color="red";
+	     $("#Err5").html(errmsg);
+		 $("#id_contactno").focus();		 
+	   }
+
+	if(g == "")
+	{
+		errmsg = "Please Enter Address";
+	    is_error = true;
+		document.getElementById("Err7").style.color="red";
+		$("#Err7").html(errmsg);
+		$("#id_address").focus();
+	}
+
+
+
+	if(h == "")
+	{
+		errmsg = "Please Enter City";
+	    is_error = true;
+		document.getElementById("Err8").style.color="red";
+		$("#Err8").html(errmsg);
+		$("#id_city").focus();
+	}
+    
+	if(i == "")
+	{
+		errmsg = "Please Enter State";
+	    is_error = true;
+		document.getElementById("Err9").style.color="red";
+		$("#Err9").html(errmsg);
+		$("#id_state").focus();
+	}
+
+	if(is_error)
+	{
+	  return false;
+	}
+	else
+	{
+	 return true;
+	}
+}
+</script>
+{% endblock content %}

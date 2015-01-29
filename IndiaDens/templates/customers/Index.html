@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% block content %}
+<style type="text/css">
+<!--
+.style1 {color: #FFFFFF}
+-->
+</style>
+<div class="round-rect">
+{%if ErrMsg%}
+  <div class="alert alert-dismissable" id="id_div1">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  <strong>Warning!</strong><p>{{ErrMsg}}</p>
+</div>
+{%endif%}
+{%if ismobileverified == 1%}
+<p> </p>
+{%else%}
+<div class="alert alert-dismissable" id="id_div1">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  <strong>Warning!</strong><p> Your mobile is not verified. Please send {{ConfirmationCode}} from the mobile number {{MobileNo}}</p>
+</div>
+{%endif%}
+{%if CustomerType > 1%}
+	{%if CountList == 1%}
+		<div class="alert alert-dismissable" id="id_div2">
+  		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  		<strong>Warning!</strong><p> You have only 1 listing in your account. Please select 'My Listings' and click Add Sale or Rental listings to add more listings</p>
+		</div>
+	{%else%}
+		<p></p>
+	{%endif%}
+{%endif%}
+{%if  CountMobVerified == 0%}
+<p> </p>
+{%else%}
+<div align="left"><p> {{CountMobVerified}} Listings needs Mobile Verification</p></div>
+{%endif%}
+{%if CountCusApproval == 0%}
+<p> </p>
+{%else%}
+<div align="left">
+  <p> Below listings needs your approval. You have posted {{CountCusApproval}} listings without login. Please click on Edit, Review and and Approve the listing. </p>
+</div>
+<form id="form1" name="form1" method="post" action="">
+{%csrf_token%}
+<table width="800" border="0" cellspacing="1" cellpadding="3">
+  <tr>
+    <td width="87" bgcolor="#666666"><span class="style1">Property Type</span></td>
+    <td width="151" bgcolor="#666666"><span class="style1">Title</span></td>
+    <td width="70" bgcolor="#666666"><span class="style1">Transaction</span></td>
+    <td width="58" bgcolor="#666666"><span class="style1">Price</span></td>
+    <td width="142" bgcolor="#666666"><span class="style1">Location</span></td>
+    <td width="37" bgcolor="#666666">Edit</td>
+    <td width="37" bgcolor="#666666">Delete</td>
+  </tr>
+  {%for slist in SaleList%}
+  <tr>
+    <td>{{slist.PropertyType}}</td>
+    <td nowrap="nowrap">{{slist.title}}</td>
+    <td>For Sale </td>
+    <td>{{slist.price}}</td>
+    <td nowrap="nowrap">{{slist.address}}</td>
+    <td><input type="button" name="Submit" value="Edit" class="btn btn-mini btn-info" onclick="Edit({{slist.listingid}},1)"/></td>
+    <td><input type="button" name="Submit" value="Delete" class="btn btn-mini btn-danger" onclick="Delete({{slist.listingid}},1)"/></td>
+  </tr>
+  {%endfor%}
+  {%for rlist in RentalList%}
+  <tr>
+    <td>{{rlist.PropertyType}}</td>
+    <td>{{rlist.title}} </td>
+    <td>For Rent </td>
+    <td>{{rlist.rent}}</td>
+    <td>{{rlist.address}}</td>
+    <td><input type="button" name="Submit" value="Edit" class="btn btn-mini btn-info" onclick="Edit({{rlist.listingid}},2)"/></td>
+    <td><input type="button" name="Submit" value="Delete" class="btn btn-mini btn-danger" onclick="Delete({{rlist.listingid}},2)"/></td>
+  </tr>
+ {%endfor%}
+</table>
+</form>
+<p>{%endif%}
+  {%if CountCallBackReq == 0%}
+</p>
+<p></p>
+{%else%}
+<div align="left"><p> {{CountCallBackReq}} Call Back Requests needs to be attended </p></div>
+{%endif%}
+{%if CountRejected == 0%}
+<p> </p>
+{%else%}
+<div align="left"><p> {{CountRejected}} Listings rejected by the Web Master</p></div>
+{%endif%}
+{%if CountExpiry == 0%}
+<p> </p>
+{%else%}
+<div align="left"><p> {{CountExpiry}} Listings nearer to the expiry date</p></div>
+{%endif%}
+</div>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+</script>
+<script>
+function Edit(lid,type)
+{	
+	var url ='/Customer/listing-form?lid=' +lid+ '&type=' +type;
+	window.location.href = url
+}
+
+function Delete(lid,type)
+{
+	var option = confirm("Are you sure? You want to delete?");
+	if(option == true)
+	{
+		var url = '/Customer/?lid=' +lid+ '&type=' +type;
+		window.location.href = url	
+	}
+	else
+	{
+		var url = '/Customer/'
+		window.location.href = url
+	}
+}
+</script>
+{% endblock content %}

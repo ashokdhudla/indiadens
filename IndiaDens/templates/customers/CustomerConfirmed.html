@@ -1,0 +1,17 @@
+{% extends 'base-home.html' %}
+{% block content %}
+<div style="margin-left:20%; margin-right:25%; margin-top:10%">
+<div class="round-rect" style="width:400px">
+<form class="form-horizontal" method="post" action="login">
+{% csrf_token %}
+<legend style="font-size:16px; color:#FF6600">Your account is verified.</legend>
+<table width="100%" border="0" cellspacing="1" cellpadding="3">
+  <tr>
+    <td width="100%">Thanks for the verfication. Your account is activated. Your login credentials are already sent to the registered email. Please click <a href="/Customer/login">here</a> to login into our portal and add/modify more listings.</td>
+    </tr>
+</table>
+<div align="center" class="style1"></div>
+</form>
+</div>
+</div>
+{% endblock content %}

@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="margin-left:20%; margin-right:25%; margin-top:10%">
+  <div class="round-rect" style="width:400px">
+    <form class="form-horizontal" enctype="multipart/form-data" action="/Customer/customer-form" method="post">
+	<input type="hidden" name="cid" value="{{cid}}" />
+      {% csrf_token %}
+      <p align="center" id="error">{{errmsg}}</p>
+	  <p align="center">{{successmsg}}</p>
+      <legend style="font-size:16px; color:#FF6600">CustomerForm </legend>
+      <table width="100%" border="0" cellspacing="1" cellpadding="3">
+	  <tr>
+          <td>Customer Type</td>
+          <td>{{form.customertype}}
+            <p id="Err0"></p></td>
+        </tr>
+		{%if form.customertype != 1%}
+	  <tr id="companyname">
+          <td>Company Name </td>
+          <td>{{form.title}}</td>
+		  </tr>
+	<tr id="subtitle">
+	<td>Subtitle </td>
+	<td>{{form.subtitle}}</td>
+    </tr>
+	{%endif%}
+        <tr>
+          <td>First Name </td>
+          <td>{{form.firstname}}
+            <p id="Err1"></p></td>
+        </tr>
+        <tr>
+          <td >Last Name </td>
+          <td>{{form.lastname}}
+            <p id="Err2"></p></td>
+        </tr>
+		{%if not request.session.Customer%}
+        <tr>
+          <td>Emailid </td>
+          <td>{{form.email}}
+           <p>{{notification}}</p><p id="Err3"></p></td>
+        </tr>
+		{%endif%}
+        <tr>
+          <td>Contact Number </td>
+          <td>{{form.phone}}
+            <p id="Err5"></p></td>
+        </tr>
+        <tr>
+          <td>Address</td>
+          <td>{{form.address}}
+            <p id="Err7"></p></td>
+        </tr>
+        <tr>
+          <td>City </td>
+          <td> {{form.City}}<p id="Err6">
+               <input type="hidden" name="city" id="id_City-x" style="color: #CCC; position: absolute; background: transparent; z-index: 1;"/>
+		 {{form.CityID.as_hidden}} </p></td>
+        </tr>
+        <tr>
+          <td>State</td>
+          <td>{{form.state}}
+            <p id="Err9"></p></td>
+        </tr>
+		<tr>
+          <td>Country</td>
+          <td>{{form.country}}</td>
+        </tr>
+		<tr>
+          <td>Fax </td>
+          <td>{{form.fax}}</td>
+        </tr>
+		<tr>
+          <td>Website </td>
+          <td>{{form.website}}</td>
+        </tr>
+        <tr>
+          <td>Logo</td>
+          <td><input type="file" name="Imagefile" /></td>
+        </tr>
+		<tr>
+          <td>Profile </td>
+          <td>{{form.profile}}</td>
+        </tr>
+		<tr>
+          <td>Deals </td>
+          <td>{{form.deals}}</td>
+        </tr>
+		<tr>
+          <td>Dealing Location </td>
+          <td>{{form.dealinglocation}}</td>
+        </tr>
+		<tr>
+          <td>Description </td>
+          <td>{{form.description}}</td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td><input name="Submit" type="submit" value="submit" onclick="return customerValidate()"/></td>
+        </tr>
+      </table>
+    </form>
+  </div>
+</div>
+ <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+ </script>
+ <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+ <script type="text/javascript" src="/static/js/jquery.mockjax.js"></script>
+<script type="text/javascript" src="/static/js/jquery.autocomplete.js"></script>
+<script src="/static/js/cities.js"></script>
+<script>
+$("#id_customertype").change(function()
+{ 
+	var category = $("#id_customertype").val();
+	if(category == 2 || category == 3)
+	{
+		$("#companyname").show();
+		$("#subtitle").show();
+	}
+	if(category == 1)
+	{
+	    $("#companyname").hide();
+		$("#subtitle").hide();
+	}
+});
+</script>
+<script>
+function customerValidate()
+{
+ var a = $("#id_firstname").val();
+ var b = $("#id_lastname").val();
+ var c = $("#id_email").val();
+ var e = $("#id_phone").val();
+ var g = $("#id_address").val();
+ var h = $("#id_cityname").val();
+ var i = $("#id_state").val();
+ var j = $("#customertype").val();
+ is_error=false; 
+   if(a == "")
+	 {
+       errmsg = "Please Enter Firstname";
+	   is_error = true;  
+	   document.getElementById("Err1").style.color="red";
+	   $("#Err1").html(errmsg);
+	   $("#id_firstname").focus();
+	 }
+	if(b == "")
+	 {
+	   errmsg = "Please Enter Lastname";
+	   is_error = true; 
+	   document.getElementById("Err2").style.color="red";
+	   $("#Err2").html(errmsg);
+	   $("#id_lastname").focus();
+	  }
+	
+
+	if(c == "")
+	 {
+	   errmsg = "Please Enter Emailid";
+	   is_error = true; 
+	   document.getElementById("Err3").style.color="red";
+	   $("#Err3").html(errmsg);
+	   $("#id_email").focus();
+	  }
+	if (e == "")
+	   {
+	     errmsg = "Please Enter Contact Number";
+	   	 is_error = true;
+		 document.getElementById("Err5").style.color="red";
+	     $("#Err5").html(errmsg);
+		 $("#id_phone").focus();		 
+	   }
+
+	if(g == "")
+	{
+		errmsg = "Please Enter Address";
+	    is_error = true;
+		document.getElementById("Err7").style.color="red";
+		$("#Err7").html(errmsg);
+		$("#id_address").focus();
+	}
+
+
+
+	if(h == "")
+	{
+		errmsg = "Please Enter City";
+	    is_error = true;
+		document.getElementById("Err8").style.color="red";
+		$("#Err8").html(errmsg);
+		$("#id_cityname").focus();
+	}
+    
+	if(i == 0)
+	{
+		errmsg = "Please Select State";
+	    is_error = true;
+		document.getElementById("Err9").style.color="red";
+		$("#Err9").html(errmsg);
+		$("#id_state").focus();
+	}
+	if(j == 0)
+	{
+		errmsg = "Please Select CustomerType";
+	    is_error = true;
+		document.getElementById("Err0").style.color="red";
+		$("#Err0").html(errmsg);
+		$("#id_customertype").focus();
+	}
+
+	if(is_error)
+	{
+	  return false;
+	}
+	else
+	{
+	 return true;
+	}
+}
+</script>
+{% endblock content %}

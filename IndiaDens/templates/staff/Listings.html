@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    #custom-search-form {
+        margin:0;
+        margin-top: 5px;
+        padding: 0;
+    }
+ 
+    #custom-search-form .search-query {
+        padding-right: 3px;
+        padding-right: 4px \9;
+        padding-left: 3px;
+        padding-left: 4px \9;
+        /* IE7-8 doesn't have border-radius, so don't indent the padding */
+ 
+        margin-bottom: 0;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+    }
+ 
+    #custom-search-form button {
+        border: 0;
+        background: none;
+        /** belows styles are working good */
+        padding: 2px 5px;
+        margin-top: 2px;
+        position: relative;
+        left: -28px;
+        /* IE7-8 doesn't have border-radius, so don't indent the padding */
+        margin-bottom: 0;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+    }
+ 
+    .search-query:focus + button {
+        z-index: 3;   
+    }
+</style>
+<div style="margin-left:1%;  margin-top:5%" class="round-rect">
+<form action="listings" method="post" class="form-search form-horizontal">
+{% csrf_token %}
+<span style="font-size:16px; color:#6699CC; margin-top:1%" class="pull-left">Please select Customer</span>&nbsp;
+<div class="input-append  pull-right" style="margin-top:1%">Search for customer:<input type="text" name="SearchCustomer" class="search-query" placeholder="Search"/><button type="submit" class="btn btn-mini"><i class="icon-search"></i></button>
+<input type="hidden" name="type" value="{{type}}" /></div>
+</form>
+<table width="100%" border="0" align="center" cellpadding="3" cellspacing="1"id="nav" class="table table-hover">
+  <tr  bgcolor="#FFFEF9">
+    <th width="213" bgcolor="#CCCCCC">Customer Name </th>
+    <th width="113" bgcolor="#CCCCCC">Contact Number </th>
+    <th width="169" bgcolor="#CCCCCC">EMail</th>
+    <th width="383" bgcolor="#CCCCCC">City and State </th>
+	<th width="80" bgcolor="#CCCCCC"> Listings </th>
+	<th width="81" bgcolor="#CCCCCC">&nbsp;</th>
+  </tr>
+  {% for c in cust_list %}
+  <tr  bgcolor="#FFFEF9" onclick="Navigation({{c.customerid}},{{type}})" >
+    <td>{{c.firstname}}&nbsp;{{c.lastname}}</td>
+    <td>{{c.phone}}</td>
+    <td>{{c.email}}</td>
+	<td>{{c.City.name}}, {{c.State.name}}</td>
+	{%if type == 1%}
+	<td>{{c.Salecounter}}</td>
+	{%elif type == 2%}
+	<td>{{c.Rentalcounter}}</td>
+	{%endif%}
+	</tr>
+  {% endfor %}
+</table>
+</div>
+<div class="pagination" align="center">
+    <span class="step-links">
+        {% if cust_list.has_previous %}
+            <a href="?page={{ cust_list.previous_page_number }}&type={{type}}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ cust_list.number }} of {{ cust_list.paginator.num_pages }}
+        </span>
+
+        {% if cust_list.has_next %}
+            <a href="?page={{ cust_list.next_page_number }}&type={{type}}">next</a>
+        {% endif %}
+    </span>
+</div>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+</script>
+<script>
+$('#nav').css('cursor', 'pointer');
+function Navigation(cid,type)
+{
+  var url = '/Customer/customer-listings?cid=' +cid+ '&type='+type;
+  window.location.href=url;
+}
+</script>
+{% endblock %} 

@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="panel" style="width:900px; min-height:400px">
+<br /><br /><br /><br /><br />
+<div class="round-rect" style="width:400px;">
+<form class="form-horizontal" method="post" action="login" id="theForm">
+{% csrf_token %}
+<p id="ErrorMessage"> </p>
+<legend style="font-size:16px; color:#FF6600">Seller or Landlord Login</legend>
+<table width="100%" border="0" cellspacing="1" cellpadding="3">
+  <tr>
+    <td width="33%">Email or Phone No. </td>
+    <td width="67%">
+	<input name="username" type="text" class="form-control" id="inputEmail" placeholder="Email"><p id="Err1"></p></td>
+  </tr>
+  
+  <tr>
+    <td>Password</td>
+    <td><input name="password" type="password" class="form-control" id="inputPassword" placeholder="Password"><p id="Err2"></p><span style="color:#0066FF; cursor:pointer" onclick="ResetPassword()">Forgot Password</span> </td>
+  </tr>
+  
+  <tr>
+    <td>&nbsp;</td>
+    <td><button type="button" class="btn btn-default" onclick="return loginValidation()">Sign in</button>
+  </tr>
+</table>
+<div align="center" class="style1"></div>
+</form>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+</script>
+<script>
+function loginValidation()
+{
+  var email = $("#inputEmail").val()
+  var pswd = $("#inputPassword").val()
+  is_error = false;
+  if(email=="" || !email)
+  {
+  	errmsg  = "Enter valid Email or Mobile Number"
+	is_error = true;
+	document.getElementById("Err1").style.color="red";
+	$("#Err1").html(errmsg);
+  }
+
+  if(!pswd || pswd==" ")
+  {
+  	errmsg = "Enter valid Password"
+	is_error = true;
+	document.getElementById("Err2").style.color="red";
+	$("#Err2").html(errmsg);
+  }
+  
+  if(is_error)
+  {
+  	return false;
+  }
+  
+  else
+  {
+  	var query_string = $('#theForm').serialize();
+  	url = '/Customer/login'
+	post_data = query_string
+	$.post(url, post_data, function(data,status){
+	if(data == "Login Failed")
+	{
+		$("#ErrorMessage").html("Invalid Username and/or Password");
+	}	
+	if(data == "Login Success")
+	{
+		window.location.href = "/Customer/"
+	}
+	return true;
+  	});
+  }
+
+}
+
+function ResetPassword()
+{
+  var email = $("#inputEmail").val();
+  if(!email || email == "")
+  {
+  	errmsg  = "Please enter Email"
+	is_error = true;
+	document.getElementById("Err1").style.color="red";
+	$("#Err1").html(errmsg);
+  }
+  
+  if(email)
+  {
+  	option = confirm("Are you sure you want to reset the password")
+//	alert(option);
+	if(option == true)
+	{
+  		alert("sending confirmation mail");
+  		url = "/Customer/reset-password?emailid=" + email
+		$.get(url, function(data) {
+    	alert("Password Reset has been done. Please check your mail box")
+   		});
+	}
+  }
+}
+
+</script>
+</div>
+</div>
+{% endblock content %}

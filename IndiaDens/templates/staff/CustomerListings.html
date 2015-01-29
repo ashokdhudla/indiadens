@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+  {% block content %}
+<style type="text/css">
+<!--
+.style2 {color: #546C53}
+-->
+</style>
+<div class="panel">
+  {%if not msg%}
+<table width="929" border="0" cellspacing="0" cellpadding="0" align="center" class="table table-hover">
+  <tr bgcolor="#CCCCFF">
+    <th width="88">PropertyId</th>
+    <th width="104">Property Type</th>
+    <th width="220">Title</th>
+    <th width="107">Mobile Number</th>
+    <th width="118">Address</th>
+    <th width="136">City</th>
+	<th width="136">State</th>
+	<th width="136">&nbsp;</th>
+  </tr>
+  {% for clist in CustomersListings %}
+  <tr>
+    <td align="center">{{clist.propertyid}}</td>
+    <td align="center">{{clist.propertytypeid}}</td>
+    <td align="center">{{clist.title}}</td>
+    <td align="center">{{clist.phone}}</td>
+    <td align="center">{{clist.address}}</td>
+    <td align="center">{{clist.City.name}}</td>
+	<td align="center">{{clist.State.name}}</td>
+    <td><div align="center">
+      <input type="submit" name="Submit" value="Edit" onclick="Edit({{clist.listingid}},{{type}})"/>
+    </div></td>
+  </tr>
+  {% endfor %}
+</table>
+<div class="pagination" align="center">
+    <span class="step-links">
+        {% if CustomersListings.has_previous %}
+            <a href="?page={{ CustomersListings.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ CustomersListings.number }} of {{ CustomersListings.paginator.num_pages }}
+        </span>
+
+        {% if CustomersListings.has_next %}
+            <a href="?page={{ CustomersListings.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+{%endif%}
+</div>
+<h2 align="center" class="style2">{{msg}}</h2>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+</script>
+<script>
+function Edit(lid,type)
+{
+	var url ='/Customer/listing-form?lid=' +lid+ '&type=' +type;
+	window.location.href = url
+}
+</script>
+{% endblock content %}

@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+  {% block content %}
+<style>
+    #custom-search-form {
+        margin:0;
+        margin-top: 5px;
+        padding: 0;
+    }
+ 
+    #custom-search-form .search-query {
+        padding-right: 3px;
+        padding-right: 4px \9;
+        padding-left: 3px;
+        padding-left: 4px \9;
+        /* IE7-8 doesn't have border-radius, so don't indent the padding */
+ 
+        margin-bottom: 0;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+    }
+ 
+    #custom-search-form button {
+        border: 0;
+        background: none;
+        /** belows styles are working good */
+        padding: 2px 5px;
+        margin-top: 2px;
+        position: relative;
+        left: -28px;
+        /* IE7-8 doesn't have border-radius, so don't indent the padding */
+        margin-bottom: 0;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+    }
+ 
+    .search-query:focus + button {
+        z-index: 3;   
+    }
+</style>
+<div style="margin-left:1%;  margin-top:5%" class="round-rect">
+<form action="/Staff/employee-list" method="post" class="form-search form-horizontal">
+<p align="center">{{msg}}</p>
+{% csrf_token %}
+{%if not msg%}
+<h4 style="font-size:16px; color:#FF6600; margin-top:1%" class="pull-left">{% if role == 'S' or role == 'A' %}EMPLOYEES {% else %} EXECUTIVES{% endif %}</h4>
+<div class="input-append  pull-right" style="margin-top:1%"><input type="text" name="keywords" class="search-query" placeholder="Search"/><button type="submit" class="btn btn-mini"><i class="icon-search"></i></button></div>
+<input type="hidden" name="role" value="{{role}}" />
+<input type="hidden" name="role1" value="{{role1}}" />
+</form>
+<table width="920" border="0" align="center" class="table table-hover">
+<thead>
+  <tr>
+    {%if role == 'E' %}
+    <th width="182">Business</th>
+	{%endif%}
+    <th width="162">Name</th>
+    <th width="115">Phone</th>
+    <th width="125">Email</th>
+    <th width="276">Address</th>
+    <th>&nbsp;</th>
+  </tr>
+</thead>
+  {% for l in emp_list %}
+  <tr>
+  {%if role == 'E' %}
+   <td id="cat">{{l.BusinessCategoryName}}</td>
+   {%endif%}
+    <td>{{l.firstname}} {{l.lastname}}</td>
+    <td>{{l.contactno}}</td>
+    <td>{{l.emailid}}</td>
+    <td nowrap="nowrap">{{l.address}}, {{l.city}}, {{l.State.name}}</td>
+	<td><input type="submit" name="submit" value="Edit" class="btn-info btn-mini" onclick="employeeForm('{{l.role}}',{{l.employeeid}},'{{role1}}')"/></td>
+  </tr>
+  {%endfor%}
+</table>
+{%endif%}
+</div>
+<div class="pagination" align="center">
+    <span class="step-links">
+        {% if emp_list.has_previous %}
+            <a href="?page={{ emp_list.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ emp_list.number }} of {{ emp_list.paginator.num_pages }}
+        </span>
+
+        {% if emp_list.has_next %}
+            <a href="?page={{ emp_list.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+
+<script>
+function employeeForm(role,eid,role1)
+{
+  if(role == 'E')
+  {
+  url = 'executive-registration?eid='+eid+'&role='+role1;
+  window.location.href=url;
+  }
+  else if(role == 'S')
+  {
+   url = 'employee-form?eid='+eid+'&role='+role1;
+   window.location.href=url;
+  }
+}
+  </script>
+{%endblock content%}

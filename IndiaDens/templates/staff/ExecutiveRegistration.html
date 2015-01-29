@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="margin-left:20%; margin-right:25%; margin-top:10%">
+  <div class="round-rect" style="width:600px">
+    <form class="form-horizontal" enctype="multipart/form-data" action="executive-registration" method="post">
+      {% csrf_token %}
+      <p align="center" id="error">{{errmsg}}</p>
+	  <input type="hidden" name="eid" value="{{employeeid}}" />
+      <legend style="font-size:16px; color:#FF6600">Executive Registration </legend>
+      <table width="100%" border="0" cellspacing="1" cellpadding="3">
+        <tr>
+          <td colspan="2"><div style="float:left; width:200px;">First Name&nbsp;{{form.firstname}}<span id="Err1"></span></div>
+            <div style="float:left">Last Name&nbsp;{{form.lastname}}
+              <p id="Err2"></p>
+            </div></td>
+        </tr>
+        <tr>
+          <td>Emailid </td>
+          <td>{{form.emailid}}
+            <p id="Err3"></p></td>
+        </tr>
+        <tr>
+          <td>Password </td>
+          <td>{{form.loginpwd}}
+            <p id="Err4"></p></td>
+        </tr>
+        <tr>
+          <td>Contact Number </td>
+          <td>{{form.contactno}}
+            <p id="Err5"></p></td>
+        </tr>
+        <tr>
+          <td>Business Category </td>
+          <td>{{form.business_category}}
+            <p id="Err6"></p></td>
+        </tr>
+        <tr>
+          <td colspan="2"  id="BusinessTR" style="display:none"><div style="width:100%; height:40px">Title {{form.title}}</div>
+            <div style="width:100%;background-color:#E6F0F9">Business Info - Tell us about your existing business </div>
+            <div style="width:100%">{{form.business_info}}</div></td>
+        </tr>
+        <tr>
+          <td colspan="2"><div style="width:100%;background-color:#E6F0F9">Address</div>
+            <div style="width:100%">{{form.address}}</div>
+            <p id="Err7"></p></td>
+        </tr>
+        <tr>
+          <td colspan="2">City
+            {{form.City}}<p id="Err6"></p><div style="position: relative;">
+               <input type="hidden" name="city" id="id_City-x" style="color: #CCC; position: absolute; background: transparent; z-index: 1;"/>
+         </div>
+		 {{form.CityID.as_hidden}}
+         <!-- End Ajax City -->
+        </td>
+        </tr>
+        <tr>
+          <td>State</td>
+          <td>{{form.state}}
+            <p id="Err9"></p></td>
+        </tr>
+        <tr>
+          <td>Photo</td>
+          <td><input type="file" name="Imagedata" /></td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td><input name="Submit" type="submit" value="submit" onclick="return executiveValidate()"/></td>
+        </tr>
+      </table>
+    </form>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+ <script type="text/javascript" src="/static/js/jquery.mockjax.js"></script>
+<script type="text/javascript" src="/static/js/jquery.autocomplete.js"></script>
+<script src="/static/js/cities.js"></script>
+    <script>
+$("#id_business_category").change(function()
+{ 
+	var category = $("#id_business_category").val();
+	if(category == 1 || category == 2)
+	{
+		$("#BusinessTR").show();
+	}
+	if(category == 0)
+	{
+	    $("#BusinessTR").hide();
+	}
+});
+</script>
+    <script>
+function executiveValidate()
+{
+ var a = $("#id_firstname").val();
+ var b = $("#id_lastname").val();
+ var c = $("#id_emailid").val();
+ var d = $("#id_loginpwd").val();
+ var e = $("#id_contactno").val();
+ var f = $("#id_business_category").val();
+ var g = $("#id_address").val();
+ var h = $("#id_city").val();
+ var i = $("#id_state").val();
+ is_error=false; 
+   if(a == "")
+	 {
+       errmsg = "Please Enter Firstname";
+	   is_error = true;  
+	   document.getElementById("Err1").style.color="red";
+	   $("#Err1").html(errmsg);
+	   $("#id_firstname").focus();
+	 }
+	if(b == "")
+	 {
+	   errmsg = "Please Enter Lastname";
+	   is_error = true; 
+	   document.getElementById("Err2").style.color="red";
+	   $("#Err2").html(errmsg);
+	   $("#id_lastname").focus();
+	  }
+	
+
+	if(c == "")
+	 {
+	   errmsg = "Please Enter Emailid";
+	   is_error = true; 
+	   document.getElementById("Err3").style.color="red";
+	   $("#Err3").html(errmsg);
+	   $("#id_emailid").focus();
+	  }
+
+	if (d == "")
+	 {
+	   errmsg = "Please Enter Password";
+	   is_error = true; 
+	   document.getElementById("Err4").style.color="red";
+	   $("#Err4").html(errmsg);
+	   $("#id_loginpwd").focus();
+	 }
+	if (e == "")
+	   {
+	     errmsg = "Please Enter Contact Number";
+	   	 is_error = true;
+		 document.getElementById("Err5").style.color="red";
+	     $("#Err5").html(errmsg);
+		 $("#id_contactno").focus();		 
+	   }
+
+	if(f == "")
+	 {
+	 	errmsg = "Please Business_Category";
+	    is_error = true;
+		document.getElementById("Err6").style.color="red";
+		$("#Err6").html(errmsg);
+		$("#id_business_category").focus();
+	}	
+	if(g == "")
+	{
+		errmsg = "Please Enter Address";
+	    is_error = true;
+		document.getElementById("Err7").style.color="red";
+		$("#Err7").html(errmsg);
+		$("#id_address").focus();
+	}
+
+
+
+	if(h == "")
+	{
+		errmsg = "Please Enter City";
+	    is_error = true;
+		document.getElementById("Err8").style.color="red";
+		$("#Err8").html(errmsg);
+		$("#id_city").focus();
+	}
+    
+	if(i == "")
+	{
+		errmsg = "Please Enter State";
+	    is_error = true;
+		document.getElementById("Err9").style.color="red";
+		$("#Err9").html(errmsg);
+		$("#id_state").focus();
+	}
+
+	if(is_error)
+	{
+	  return false;
+	}
+	else
+	{
+	 return true;
+	}
+}
+</script>
+  </div>
+</div>
+{% endblock content %}

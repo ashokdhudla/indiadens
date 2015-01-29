@@ -1,0 +1,117 @@
+{% extends 'base-home.html' %}
+{% block content %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.mockjax.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.autocomplete.js"></script>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="3">
+  <tr><td><span style="color:#FF6633; font-style:normal"><u>WHEREVER YOU GO. YOU CAN FIND HOME</u></span></td><td align="right">Advertise your Property <a href="/new-listing?type=2">For Rent</a> or <a href="/new-listing?type=1">For Sale</a> </td></tr>
+  <tr>
+    <td width="300" valign="top"><img src="{{ STATIC_URL }}images/home.jpg" /></td>
+    <td><div id="content">
+        <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+          <li class="active"><a href="#red" data-toggle="tab" style="width:100px">For Rent</a></li>
+          <li><a href="#orange" data-toggle="tab" style="width:100px">For Sale</a></li>
+        </ul>
+        <form action="/get-listings" method="post">
+          {% csrf_token %}
+		  <div class="form-horizontal" style="min-height:150px;">
+            <div style="height:50px"> Property Type
+              <select name="PropertyType" style="width:200px">
+                <option value="10">Residential Apartments</option>
+                <option value="20">Independent Homes/Villas</option>
+                <option value="30">Pent House</option>
+                <option value="40">Farm House</option>
+                <option value="50">Office Space</option>
+                <option value="100">Residential Lands</option>
+                <option value="110">Commercial Lands</option>
+              </select>
+              City&nbsp;
+              <input type="text" name="city" id="id_City"  value="{{City}}" style="width:150px"/>
+              <input type="hidden" name="city" id="id_City-x" disabled="disabled" style="color: #CCC; position: absolute; background: transparent; z-index: 1;"/>
+              <input type="hidden" name="cityid" id="id_CityID" style="position: absolute; z-index: 2; background: transparent;"/>
+              <input type="hidden" name="type" id="id_type" value="1" style="position: absolute; z-index: 2; background: transparent;"/>
+            </div>
+            <div style="height:50px">
+             Bedrooms <select name="Bedrooms" style="width:150px">
+               <option value="0">Any</option>
+               <option value="1">Single Bedroom</option>
+               <option value="2">Double Bedroom</option>
+               <option value="3">Triple Bedroom</option>
+               <option value="4">Four Bedroom</option>
+               <option value="5">Five or More</option>
+             </select> Preferred Location <input name="location" type="text" maxlength="80"  size="80" />
+            </div>
+            <div style="height:50px"> Budget
+              <input type="text" name="minprice" value="0" placeholder='Min' style="width:60px">
+              &nbsp;
+              <input type="text" name="maxprice" value="0" placeholder='Max' style="width:60px">
+              Area
+              <input type="text" name="minarea" value="900" placeholder='Min' style="width:50px">
+              &nbsp;
+              <input type="text" name="maxarea" value="0" placeholder="Max" style="width:50px">
+              &nbsp;
+              <select name="AreaUnit" style="width:80px">
+                <option value="1">Sq.Ft.</option>
+                <option value="2">Sq. Mt.</option>
+                <option value="3">Sq. Yd.</option>
+                <option value="4">Acres</option>
+              </select>
+            </div>
+          </div>
+		  
+          <div id="my-tab-content" class="tab-content">
+            <div class="tab-pane active form-horizontal" id="red" style="height:50px">
+              <span style="color:blue; cursor:pointer" id="Tab">Click here to refine more</span> (You can refine the search by selecting morefacilities and restructions)
+              <div id="AdvancedSearch" style="display:none">
+                <div style="height:50px">
+                  <p>Rent Advance
+                    <input type="text" name="advance_minprice" value="0" placeholder='Min' style="width:80px">
+                    &nbsp;
+                    <input type="text" name="advance_maxprice" value="0" placeholder='Max' style="width:80px">
+                    Bachelors Allowed&nbsp;
+                    <input name="bachelors_allowed" type="checkbox" value="checkbox" checked="checked" />
+                    Families Allowed
+                    <input name="families_allowed" type="checkbox" value="checkbox" checked="checked" />
+                  </p>
+                  <p>Other Facilities: Lift
+                    <input name="lift" type="checkbox" value="checkbox" />
+                    Swimming Pool
+                    <input name="swimmingpool" type="checkbox" value="checkbox" />
+                    Gated Community
+                    <input name="gated_community" type="checkbox" value="checkbox" />
+                    Power Backup
+                    <input name="power_backup" type="checkbox" value="checkbox" />
+                    Furnished
+                    <input name="furnished" type="checkbox" value="checkbox" />
+                    Facing
+                    <select name="facing" style="width:80px">
+                      <option value="0">Any</option>
+                      <option value="1">East</option>
+                      <option value="2">West</option>
+                      <option value="3">South</option>
+                      <option value="4"></option>
+                    </select>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="orange">&nbsp;</div>
+			<br />			<br />
+            <div align="center">
+              <input name="cmdSearch" type="submit" value="Get Listings" class='btn'/>
+            </div>
+          </div>
+        </form>
+        </div></td>
+  </tr>
+  <tr>
+    <td colspan="2" valign="top" class="fotercenter" height="300px">&nbsp;</td>
+  </tr>
+</table>
+ <script>   
+       $("#Tab").click(function(){
+       $("#AdvancedSearch").slideToggle(300);
+	   });
+</script>
+<script src="{{ STATIC_URL }}js/cities.js"></script>
+{% endblock content %}

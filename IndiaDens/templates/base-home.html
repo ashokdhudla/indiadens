@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>India Dens</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="{{ STATIC_URL }}images/favicon.ico" rel="shortcut icon" type="image/x-icon">
+<link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet">
+<link href="{{ STATIC_URL }}css/jquery-ui.min.css" rel="stylesheet">
+<link href="{{ STATIC_URL }}css/jquery.dataTables_themeroller.css" rel="stylesheet">
+<link href="{{ STATIC_URL }}css/main.css" rel="stylesheet">
+
+<script src="{{ STATIC_URL }}js/jquery-ui.min.js"></script>
+<script src="{{ STATIC_URL }}js/jquery-1.9.1.js"></script>
+<script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+<script src="{{ STATIC_URL }}js/jquery.dataTables.min.js"></script>
+<script src="{{ STATIC_URL }}js/moment.min.js"></script>
+<script src="{{ STATIC_URL }}js/main.js"></script>
+<script src="{{ STATIC_URL }}js/flumensoft.js"></script>
+
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.mockjax.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.autocomplete.js"></script>
+
+<style>
+		html, body { 
+			margin:0; 
+			padding:0; 
+			font-family:"Helvetica", Arial, sans-serif;
+			height:100%; 
+			font-size:12px; 
+			line-height:18px; 
+			color:#6d6e71;
+			//background:#fff url({{ STATIC_URL }}images/home-bg.png) repeat 50%;
+            background: #2B5059 no-repeat; /* for non-css3 browsers */
+			height:auto; 
+            //filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#cccccc', endColorstr='#000000'); /* for IE */
+            //background: -webkit-gradient(linear, left top, left bottom, from(#3A292E), to(#000)); /* for webkit browsers */
+            //background: -moz-linear-gradient(top,  #3A292E,  #000); /* for firefox 3.6+ */
+
+ 	    }
+		</style>
+</head>
+<body>
+<table width="1000px" border="0" align="center">
+  <tr>
+    <td align="center">
+	<div style="height:100%; min-height:400px; display:table-cell; background-color:#FFFFFF; border-top-left-radius:2em; border-top-right-radius:2em;">
+      <div class="navbar">
+        <div class="navbar-inner"> <a class="brand" id="logo" href="/">India Dens</a>
+          <ul class="nav nav-pills pull-right">
+            <li><a href="aboutus.html">About Us</a></li>
+            <li><a href="Clients.html">Clients</a></li>
+            <li><a href="contactus.html">Contact Us</a></li>
+		   {% if request.session.Visitor %}
+  		    <li><a href="/logout?next=/get-listings">Logout</a></li>
+		   {% else %}
+  		   <li><a href="/Customer/login">Signin</a></li>
+		   {% endif %}
+          </ul>
+        </div>
+      </div>
+      <div style="background-color:#FFFFFF; width:1000px; min-height:600px; height:100%; margin-top:1%; padding:20">
+	{% block content %}
+    {% endblock content %}
+  </div>
+</td>
+  </tr>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+  {% block content %}
+<style type="text/css">
+<!--
+.style1 {color: #BF4D40}
+-->
+</style>
+
+<p align="center">{{msg}}</p>
+<legend style="font-size:16px; color:#FF6600">Call Back Requests</legend>
+<div style="margin-left:1%;  margin-top:5%" class="round-rect">
+  <h4 align="center" class="style1">{{errmsg}}</h4>
+  {%if not errmsg%}
+  <table width="920" border="0" align="center" id="tab">
+    <thead>
+      <tr bgcolor="#A8AFBB">
+        <th width="162">Name</th>
+        <th width="115">Phone</th>
+        <th width="125">Email</th>
+        <th width="222">Number of Listings</th>
+        <th width="274">Call Status</th>
+      </tr>
+    </thead>
+    {%for l in call_list%}
+    {%if l.isattended == 1%}
+    <tr bgcolor="#FFCCFF"> {%else%}
+    {%endif%}
+	<tr id="tr"> 
+      <td ><a href="/Customer/ajaxcallback-requests?cbrid={{l.callbackrequestid}}">{{l.name}}</td>
+	  <input type="hidden" name="cbrid" id="cbrid" value="{{l.callbackrequestid}}"/>
+      <td>{{l.phone}}</td>
+      <td>{{l.email}}</td>
+      <td>$Listing Count</td>
+      <td>$Call Status</td>
+    </tr>
+    {%endfor%}
+  </table>
+  
+  <!--- Model Box Begin -->
+  
+  <div class="container">
+  <div id="CallBackReqModel" class="modal hide fade in"  style="width:650px; alignment-adjust:central">
+    <div class="modal-header" align="left"> <a class="close" data-dismiss="modal">x</a>
+      <h5>Call Back Request</h5>
+    </div>
+    <div class="modal-body" align="left">
+      <form action="confirm-code" method="post" id="theForm">
+        {%csrf_token%}
+        <table width="600" border="0">
+  <tr>
+    <td><table width="600" border="0" bgcolor="#F5F5F5" cellspacing="1" cellpadding="3">
+      <tr bgcolor="#F2F8FF">
+        <td width="243">$Name</td>
+        <td width="133">$Phone</td>
+        <td width="202">$EMail</td>
+      </tr>
+      <tr bgcolor="#FFFAEC">
+        <td colspan="3">Prefferable Times: $PrefTime1, $PrefTime2, $PrefTime3</td>
+      </tr>
+      <tr bgcolor="#F9F9F9">
+        <td colspan="3">$Message</td>
+      </tr>
+      <tr bgcolor="#F9F9F9">
+        <td>Call Status</td>
+        <td><label for="ddlStatus"></label>
+          <select name="ddlStatus" id="ddlStatus">
+            <option value="0" selected="selected">Select</option>
+            <option value="1">Attended</option>
+            <option value="2">Line Busy</option>
+            <option value="3">Invalid Number</option>
+            <option value="4">Closed</option>
+          </select></td>
+        <td><input type="submit" name="cmdSave" id="cmdSave" value="Save" /></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td><table width="600" border="1" bordercolor="#F5F5F5">
+  <tr>
+    <td width="267"><a href="/listing-info?lid={{obj.listingid}}&amp;type={{ListingType}}" target="_blank"><img src="{{IMAGE_URL}}{{obj.imagethumb}}" alt="" width="200px" height="200px" /></a></td>
+    <td width="290"><div>$Title</div>
+    <div>$PropertyType </div><div>Area:$PropertyType</div><div>Bedrooms:$Bedrooms</div><div>Bathrooms:$Bathrooms</div><div>Location:$Location</div></td>
+    <td width="21">$Price</td>
+  </tr>
+  <tr>
+    <td><a href="/listing-info?lid={{obj.listingid}}&amp;type={{ListingType}}" target="_blank"><img src="{{IMAGE_URL}}{{obj.imagethumb}}" alt="" width="200px" height="200px" /></a></td>
+    <td><div>$Title</div><div>$PropertyType</div><div>Area:$PropertyType</div><div>Bedrooms:$Bedrooms</div><div>Bathrooms:$Bathrooms</div>
+      <div>Location:$Location</div></td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+</td>
+  </tr>
+</table>
+
+      </form>
+    </div>
+    <div class="modal-footer"><a href="#" class="btn btn" onclick="return SubmitValues()">Save</a> <a href="#" class="btn" data-dismiss="modal">Close</a> </div>
+  </div>
+  <script src="/static/js/bootstrap-modal.js"></script>
+</div>
+  
+  <!-- Model Box End -->
+  
+  {%endif%}
+
+
+  <script>
+  $("#tab tr").click(function(){
+    
+	cbrid = $("#cbrid").val();
+  	 url = "/ajaxcallback-request/?cbrid="+cbrid;
+	 $.get(url,function(data,status)
+	 {
+	 if (data=="success")
+	 {
+	 	alert("hello")
+		//window.location.href = "/ajaxcallback-request/?cbrid=cbrid";
+	 }
+	 });
+	 $("#CallBackReqModel").modal();
+	}
+
+});
+	    
+   
+</script>
+  {%endblock content%} </div>

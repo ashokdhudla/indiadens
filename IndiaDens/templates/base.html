@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>India Dens</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="{{ STATIC_URL }}images/favicon.ico" rel="shortcut icon" type="image/x-icon">
+<link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet">
+<link href="{{ STATIC_URL }}css/jquery-ui.min.css" rel="stylesheet">
+<link href="{{ STATIC_URL }}css/jquery.dataTables_themeroller.css" rel="stylesheet">
+<link href="{{ STATIC_URL }}css/main.css" rel="stylesheet">
+
+<script src="{{ STATIC_URL }}js/jquery-ui.min.js"></script>
+<script src="{{ STATIC_URL }}js/jquery-1.9.1.js"></script>
+<script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+<script src="{{ STATIC_URL }}js/jquery.dataTables.min.js"></script>
+<script src="{{ STATIC_URL }}js/moment.min.js"></script>
+<script src="{{ STATIC_URL }}js/main.js"></script>
+<script src="{{ STATIC_URL }}js/flumensoft.js"></script>
+
+<style>
+		html, body { 
+			margin:0; 
+			padding:0; 
+			font-family:"Helvetica", Arial, sans-serif;
+			height:100%; 
+			font-size:12px; 
+			line-height:18px; 
+			color:#6d6e71;
+			//background:#fff url({{ STATIC_URL }}images/home-bg.png) repeat 50%;
+            background: #2B5059 no-repeat; /* for non-css3 browsers */
+			height:auto; 
+            //filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#cccccc', endColorstr='#000000'); /* for IE */
+            //background: -webkit-gradient(linear, left top, left bottom, from(#3A292E), to(#000)); /* for webkit browsers */
+            //background: -moz-linear-gradient(top,  #3A292E,  #000); /* for firefox 3.6+ */
+
+ 	    }
+		</style>
+</head>
+<body>
+<table width="1000px" border="0" align="center" style="position:relative;">
+  <tr>
+    <td>
+	<div style="height:100%; min-height:400px; display:table-cell; background-color:#FFFFFF; border-top-left-radius:2em; border-top-right-radius:2em;">
+	  <div class="navbar">
+    <div class="navbar-inner"><a class="brand" id="logo" href="/">India Dens</a>
+
+	<ul class="nav">
+{% if request.session.User %}
+	 <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Users<b class="caret"></b></a>
+              <ul class="dropdown-menu">
+		     	{% if request.session.User.role == 'A' %}
+                   <li><a href="/Staff/employee-form"><i class="icon-star"></i> Add new Employee</a></li> 
+                   <li><a href="/Staff/executive-registration"><i class="icon-star"></i> Add new Executive</a></li> 
+                   <li><a href="/Staff/employee-list?role=S"><i class="icon-star"></i> Employees</a></li> 
+			    {% endif %}   
+                   <li><a href="/Staff/employee-list?role=E"><i class="icon-star"></i> Executives</a></li>
+              </ul>
+     </li>
+	
+	 <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Messages<b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                   <li><a href="/Staff/mobilemessages"><i class="icon-star"></i> SMS List</a></li> 
+                   <li><a href="/userform"><i class="icon-star"></i> EMails</a></li> 
+              </ul>
+     </li>
+
+    {% if request.session.User.role == 'E' or  request.session.User.role == 'A' or request.session.User.role == 'S'%}
+	 <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Customers<b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                   <li><a href="/Customer/customer-form"><i class="icon-star"></i> Add New Customer</a></li> 
+                   <li><a href="/Staff/customer-list"><i class="icon-star"></i> View Customers</a></li>
+                   <li><a href="#"><i class="icon-star"></i> Review Changes</a></li>
+              </ul>
+     </li>
+	 <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Listings<b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                   <li><a href="/Staff/listings?type=2"><i class="icon-star"></i> View Rental Listings</a></li>
+                   <li><a href="/Staff/listings?type=1"><i class="icon-star"></i> View Sale Listings</a></li>
+                   <li><a href="#"><i class="icon-star"></i> Listing Updates</a></li> 
+              </ul>
+     </li>
+	</ul>
+ {% endif %}
+
+{% endif %}
+
+{% if request.session.Customer %}
+     <li>
+       <a href="/Customer/">My Home</i></a>
+     </li>
+	 <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">My Listings<b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                   <li><a href="/Customer/listing-form?cid={{request.session.Customer.customerid}}&type=1"><i class="icon-star"></i> Add Sale Listing</a></li> 
+                   <li><a href="/Customer/listing-form?cid={{request.session.Customer.customerid}}&type=2"><i class="icon-star"></i> Add Rental Listing</a></li> 
+
+                   <li><a href="/Customer/customer-listings?cid={{request.session.Customer.customerid}}&type=1"><i class="icon-star"></i>View Sale Listings</a></li> 
+                   <li><a href="/Customer/customer-listings?cid={{request.session.Customer.customerid}}&type=2"><i class="icon-star"></i>View Rental Listings</a></li> 
+              </ul>
+     </li>
+	 <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Visitors<b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                   <li><a href="/Customer/callback-requests"><i class="icon-star"></i> Call Back Requests</a></li>
+                   <li><a href="/Customer/visitor-reviews"><i class="icon-star"></i>Visitor Reviews</a></li>
+              </ul>
+
+     </li>
+	 <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Population<b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                   <li><a href="/underconstruction"><i class="icon-star"></i> Customers</a></li> 
+                   <li><a href="/underconstruction"><i class="icon-star"></i> Visitors</a></li>
+              </ul>
+     </li>
+{% endif %}
+</ul>
+
+{% if request.session.User or request.session.Customer %}
+	<ul class="nav pull-right">                          
+
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Reports<b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                        <li class="disabled"><a href="#">Logs</a></li>
+                                        <li class="disabled"><a href="#">Data Refresh</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                  <a class="dropdown-toggle" data-toggle="dropdown" href="#">{% if request.session.Customer %} {{ request.session.Customer.email }} {% else %} {{ request.session.User.emailid }} {% endif %}<b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{% if request.session.Customer %}/Customer/customer-form?cid={{ request.session.Customer.customerid}}{% else %}/Staff/employee-form?eid={{request.session.User.employeeid}}{% endif %}">My Profile</a></li>
+                                        <li><a href="{% if request.session.Customer %}/Customer/change-password{% else %}/Staff/change-password{% endif %}">Change password</a></li>
+                                                                        
+                                            <li class="divider"></li>                            
+                                            <li><a href="/Customer/close-account?cid={{request.session.Customer.customerid}}">Close my Account</a></li>
+                                        
+                                        <li class="divider"></li>  
+										{% if request.session.User.role == 'A' %} <li ><a href="/Staff/zap-db"><font color="#FF0000">*Clean DATA*</font></a></li> {% endif %}
+                                        <li class="disabled"><a href="#">Help and Support</a></li>
+                                        <li><a href="/logout?login={% if request.session.Customer %}customer{% else %}employee{% endif %}">Logout</a></li>
+                                    </ul>
+                                </li>                            
+                        </ul>
+   {% else %}
+     	<ul class="nav pull-right"> 
+		   <li><a href="/Customer/login">Signin</a></li>
+		</ul>
+   {% endif %}
+
+
+   </div>
+   <div id="divBody"  style="min-height:600px">
+	{% block content %}
+    {% endblock content %}
+   </div>
+  </div>
+  <span class="form-footer">&copy; 2013 Flumen Softwares &reg; Private LImited.</span> </div>
+</td>
+  </tr>
+</table>
+
+<script src="{{ STATIC_URL }}js/flumensoft.js"></script>
+</body>
+</html>

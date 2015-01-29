@@ -1,0 +1,345 @@
+{% extends 'base-home.html' %}
+{% block content %}
+<style type="text/css">
+<!--
+.style4 {
+	color: #663333;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-weight: bold;
+}
+.style10 {font-size: 10}
+.style25 {font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; color: #006633; }
+.style26 {font-family: Verdana, Arial, Helvetica, sans-serif}
+      #map_canvas {
+        width: 800px;
+        height: 400px;
+      }
+.jscall {
+    color: #0099FF;
+	cursor: pointer;
+	}
+
+-->
+</style>
+<style>
+body {font-family:Arial, Helvetica, sans-serif; font-size:12px;}
+
+.fadein { 
+position:relative; height:332px; width:500px; margin:0 auto;
+background: url("slideshow-bg.png") repeat-x scroll left top transparent;
+padding: 10px;
+ }
+.fadein img { position:absolute; left:10px; top:10px; }
+</style>
+<script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script>
+      function DrawMap(lat, long, pTitle) {
+	    var myLatlng = new google.maps.LatLng(lat, long)
+        var map_canvas = document.getElementById('map_canvas');
+        var map_options = {
+          center: myLatlng,
+          zoom: 15,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        }
+        var map = new google.maps.Map(map_canvas, map_options);
+
+		var marker = new google.maps.Marker({
+          position: myLatlng,
+          map: map,
+          title: pTitle
+        });		
+      }
+    </script>
+</p>
+<table width="1000px" border="0" cellpadding="5" cellspacing="5" align="center" style="position:relative;">
+  <tr bgcolor="#FFFFFF">
+    <td height="35"><span class="style4">{{title}}</span></td>
+    <td><div align="right"><span class="style4">Price: Rs.{{price}}</span></div></td>
+  </tr>
+  <tr bgcolor="#FFFFFF">
+    <td colspan="2" valign="top"><table width="100%" border="0" cellspacing="1" cellpadding="2">
+        <tr>
+          <td width="300px" valign="top">
+		  <div class="fadein"> {%for i in image_list%} {%if i.listingimageid != 0%}<img class="img" src="{{IMAGE_URL}}{{i.largeimage}}" height="200" width="300"> {%else%}<img src="{{IMAGE_URL}}{{image}}" height="200" width="300" />{%endif%}{%endfor%} </div></td>
+          <td rowspan="2" valign="top"><table border="0" align="center" cellpadding="2" cellspacing="1">
+              <tr>
+                <td class="style10"><span class="style25">Property Type </span></td>
+                {%if ptype == 10 %}
+                <td class="style10"><span class="style25"> Apartements </span></td>
+                {%elif ptype == 20 %}
+                <td class="style10"><span class="style25"> Individual Home </span></td>
+                {%elif ptype == 25 %}
+                <td class="style10"><span class="style25"> Villa </span></td>
+                {%elif ptype == 40 %}
+                <td class="style10"><span class="style25"> Pent House </span></td>
+                {%elif ptype == 40 %}
+                <td class="style10"><span class="style25"> Farm House</span></td>
+                {%elif ptype == 50 %}
+                <td class="style10"><span class="style25"> Office Space </span></td>
+                {%elif ptype == 100 %}
+                <td class="style10"><span class="style25"> Residential Land </span></td>
+                {%elif ptype == 110 %}
+                <td class="style10"><span class="style25"> Commercial Land </span></td>
+                {%endif%} </tr>
+              <tr>
+                <td class="style25">Area</td>
+                {% if areaunit == 1%}
+                <td class="style10"><span class="style25">{{area}}Sq ft</span></td>
+                {%elif areaunit == 2 %}
+                <td class="style10"><span class="style25">{{area}}Sq Mt </span></td>
+                {%elif areaunit == 3 %}
+                <td class="style10"><span class="style25">{{area}}Sq yd </span></td>
+                {%elif obj.areaunit == 4%}
+                <td class="style10"><span class="style25">{{obj.area}}Acres </span></td>
+                {%endif%} </tr>
+              <tr> {%if bedrooms %}
+                <td class="style10"><span class="style25">BedRooms</span></td>
+                <td class="style10"><span class="style25">{{bedrooms}}</span></td>
+                {%else%}
+                {%endif%} </tr>
+              <tr> {%if bathrooms%}
+                <td class="style10"><span class="style25">BathRooms</span></td>
+                <td class="style10"><span class="style25">{{bathrooms}}</span></td>
+                {%else%}
+                {%endif%} </tr>
+              {% if type == 1 %}
+              <tr>
+                <td class="style10"><span class="style25">Property Status </span></td>
+                {% if pstatus == "a"%}
+                <td class="style25"> Under Construction </td>
+                {% elif pstatus == "b"%}
+                <td class="style25"> New Construction</td>
+                {% elif pstatus == "c"%}
+                <td class="style25"> Resale </td>
+                {% elif pstatus == "d"%}
+                <td class="style25"> New Project </td>
+                {% endif %} </tr>
+              {%endif%}
+              {% if type == 2 %}
+              <tr>
+                <td class="style10"><span class="style25">Present Status </span></td>
+                {% if pstatus == "a"%}
+                <td class="style25"> Occupied </td>
+                {% elif pstatus == "b"%}
+                <td class="style25"> Vacant</td>
+                {% elif pstatus == "c"%}
+                <td class="style25"> Yet To Vacant </td>
+                {% elif pstatus == "d"%}
+                <td class="style25"> New Project </td>
+                {% endif %} </tr>
+              {%endif%}
+              <tr> {%if ownershipid == 1 %}
+                <td class="style10"><span class="style25">Posted By </span></td>
+                <td class="style25">Owner</td>
+                {%elif ownershipid == 2%}
+                <td class="style10"><span class="style25">Posted By </span></td>
+                <td class="style25">Agent</td>
+                {%elif ownershipid == 3%}
+                <td class="style10"><span class="style25">Posted By </span></td>
+                <td class="style25">Web Master</td>
+                {%endif%} </tr>
+              <tr>
+                <td class="style10"><span class="style25">Posted Date </span></td>
+                <td class="style25">{{PostedDate|date:"d-M-Y"}} </td>
+              </tr>
+            </table>
+            <br />
+            <table width="90%" border="0" align="center" cellpadding="2" cellspacing="1">
+              <tr>
+                <td bgcolor="#B7CAD0"><span class="style26">Property Location </span></td>
+              </tr>
+              <tr>
+                <td height="83" bgcolor="#E6EAF0"><p>{{Address}}</p>
+                <p>{{City}}</p></td>
+              </tr>
+              <tr>
+                <td height="20" bgcolor="#FFFFFF"><div align="center"><span class="jscall" onclick="ShowMap({{Latitude}}, {{Longitude}}, '{{MapPointerTitle}}')">Click here for Map View </span></div></td>
+              </tr>
+            </table>
+            <p>&nbsp;</p></td>
+        </tr>
+        <tr>
+          <td height="23" valign="top"><table width="90%" border="0" cellspacing="1" cellpadding="2">
+              <tr><td>$Contact Name</td><td>$Contact Number</td>
+                <td><span class="jscall" title="Click here to place a request. We will call you back" onclick="DialogBox()">Request for Call Back </span></td>
+                <td><div class="round-rect" id="Dbox" style="display:none">
+                    <form class="form-horizontal" action="listing-info" method="post" id="request-form">
+                      {% csrf_token %}
+                      <table width="100%" border="0" cellspacing="1" cellpadding="3">
+                        <tr>
+                          <td> Name </td>
+                          <td>{{form.name}}
+                            <p id="Err1"></p></td>
+                        </tr>
+                        <tr>
+                          <td>Emailid </td>
+                          <td>{{form.email}}
+                            <p id="Err2"></p></td>
+                        </tr>
+                        <tr>
+                          <td>Contact Number </td>
+                          <td>{{form.phone}}
+                            <p id="Err3"></p></td>
+                          <td>{{form.CustomerId}}</td>
+                          <td>{{form.ListingId}}</td>
+                          <td>{{form.ListingType}}</td>
+                        </tr>
+                        <tr>
+                          <td>Preferable Time1</td>
+                          <td>{{form.pftime1}}
+                            <p id="Err4"></p></td>
+                        </tr>
+                        <tr>
+                          <td>Preferable Time2</td>
+                          <td>{{form.pftime2}}
+                            <p id="Err7"></p></td>
+                        </tr>
+                        <tr>
+                          <td>Preferable Time3</td>
+                          <td>{{form.pftime3}}
+                            <p id="Err7"></p></td>
+                        </tr>
+                        <tr>
+                          <td>Message</td>
+                          <td>{{form.message}}
+                            <p id="Err9"></p></td>
+                        </tr>
+                        <tr>
+                          <td>&nbsp;</td>
+                          <td><input name="submit" type="button" value="submit" onclick="return RequestSubmit()"/></td>
+                        </tr>
+                      </table>
+                    </form>
+                  </div></td>
+                <td>
+                  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+                  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+                  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+                  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+                  <script>
+	$(function(){
+	$('.fadein img:gt(0)').hide();
+	setInterval(function(){$('.fadein :first-child').fadeOut().next('img').fadeIn().end().appendTo('.fadein');}, 3000);
+   });
+
+
+</script>
+                </td>
+              </tr>
+            </table></td>
+        </tr>
+        <td colspan="2" class="style4"><div id="ContactInfoPanel" style="display:none"></div></td>
+        </tr>
+      </table>
+      <div id="map_canvas" style="display:none" class="round-rect">Loading Map....</div>
+      <table width="100%">
+        <tr>
+          <td colspan="2" bgcolor="#FFB482" class="style4">Property Information </td>
+        </tr>
+        <tr>
+          <td colspan="2">{{Description}}<br />
+            <br />
+            <br /></td>
+        </tr>
+        <tr>
+          <td colspan="2" bgcolor="#FFB482">Other  Information </td>
+        </tr>
+        {% for Obj in attr_list %}
+        <tr>
+          <td colspan="2">
+        <tr>
+          <td>{{Obj.name}}</td>
+          <td>{{Obj.value}}</td>
+        </tr>
+        <tr>
+          <td><hr /></td>
+        </tr>
+        {% endfor %}
+      </table></td>
+  </tr>
+  <tr bgcolor="#FFFFFF">
+    <td colspan="2">&nbsp;</td>
+  </tr>
+  <tr bgcolor="#FFFFFF">
+    <td colspan="2">&nbsp;</td>
+  </tr>
+  <tr bgcolor="#FFFFFF">
+    <td colspan="2">&nbsp;</td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<script>
+function ShowMap(pLatitude, pLongitude, pTitle)
+{
+  $("#map_canvas").slideToggle(function () {
+      if (!$("#map_canvas").is(":hidden"))
+	  {
+        DrawMap(pLatitude, pLongitude, pTitle);
+	  }
+    }
+   );
+}
+
+</script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<script>
+function DialogBox()
+{
+	var dialogbox = $("#Dbox").dialog({ autoOpen: false,
+  	height: 400,
+  	width: 350
+	});
+	$( "#Dbox" ).dialog({ title: "CallBack Request" });
+    $( "#Dbox" ).dialog( "option", "title", "CallBack Request" );
+	dialogbox.dialog('open');
+}
+function RequestSubmit()
+{
+    var name = $("#id_name").val();
+	var email = $("#id_email").val();
+	var phno = $("#id_phone").val();
+	var time1 = $("#id_pftime1").val();
+if(name=="")
+ {
+   $("#Err1").html("Please Enter Your name");
+   $("#id_name").focus()
+   document.getElementById("Err1").style.color="red";
+   return false;
+ }
+ if(email=="")
+ {
+   $("#Err2").html("Please Enter Email");
+   $("#id_email").focus()
+   document.getElementById("Err2").style.color="red";
+   return false;
+ }
+ if(phno=="")
+ {
+   $("#Err3").html("Please Enter Phone number");
+   $("#id_phone").focus()
+   document.getElementById("Err3").style.color="red";
+   return false;
+ }
+ if(time1=="")
+ {
+   $("#Err4").html("Please Enter preferable time");
+   $("#id_pftime1").focus()
+   document.getElementById("Err4").style.color="red";
+   return false;
+ }
+	var query_string = $('#request-form').serialize();
+  	url = '/listing-info';
+	post_data = query_string;
+  	$.post(url, post_data, function(data,status){
+	  if(data == "request taken")
+	  {
+	      $("#Dbox").dialog('close');
+	  }	
+	 return true;
+  	});
+}
+
+</script>
+{% endblock %} 

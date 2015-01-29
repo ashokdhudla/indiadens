@@ -1,0 +1,805 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jquery-gmaps-latlon-picker.css"/>
+<script src="{{ STATIC_URL }}js/jquery-gmaps-latlon-picker.js"></script>
+<form name="frmListing" method="post" auto complete ='off' enctype="multipart/form-data" action="/Customer/listing-form">
+<p align="center" id="error">{{errmsg}}</p>
+{% csrf_token %}
+<input type="hidden" name="lid" value="{{lid}}" />
+<input type="hidden" name="cityid" value="{{cityid}}" />
+<input type="hidden" name="Typeid" value="{{type}}"/>
+<input type="hidden" name="cid" value="{{cid}}" />
+<input type="hidden" name="Approvalstatus" value="{{Approvalstatus}}" />
+<div>
+<div class="panel" style="width:800px; min-height:400px">
+<h3 style="font-size:16px; color:#FF6600;">Add/Edit Listing</h3>
+<font color="#056B14">
+<p align="center" id="SuccessMessage">{{successmsg}}</p>
+</font>
+<div id="Tabs" style="width:100%">
+  <ul class="nav nav-tabs" style="width:100%">
+    <li class="active" id="Tab1"><a href="#">Basic Info</a></li>
+    <li id="Tab2"><a href="#">Description</a></li>
+    <li id="Tab3"><a href="#">Location</a></li>
+    <li id="Tab4"><a href="#">Map</a></li>
+    <li id="Tab5"><a href="#">Images</a></li>
+    <li id="Tab6"><a href="#">Contact Info</a></li>
+    <li id="Tab7"><a href="#">Facilities</a></li>
+    <li id="Tab8"><a href="#">Other Information</a></li>
+  </ul>
+</div>
+<div id="ListingInfoForm" style="min-height:400px" class="round-border-nopadding">
+<table width="100%" cellpadding="0" cellspacing="0">
+<tr height="50px" class="alert-info"><td><p id="PanelMessage">This is a primary information of your property. The search results will be served based on the information you have provided here.</p><td></td></tr>
+<tr>
+  <td> {% if type == 1 %}
+    <table align="center" width="100%" border="0" cellspacing="0" cellpadding="3" id="Panel1">
+      <tr>
+        <td colspan="2">&nbsp;</td>
+      </tr>
+      <tr>
+        <td width="201">PropertyType </td>
+        <td width="879">{{form.PropertyType}}
+		<p id="errpropertytype"></p></td>
+      </tr>
+      <tr>
+        <td>Ownership</td>
+        <td>{{form.Ownership}} 
+		<p id="errownership" ></p></td>
+      </tr>
+      <tr>
+        <td>Title</td>
+        <td>{{form.Title}}
+		<p id="errtitle"></p></td>
+      </tr>
+      <tr>
+        <td>Price</td>
+        <td>{{form.Price}}
+		 <p id="errprice"></p></td>
+      </tr>
+
+      <tr id=BedRooms   {% if PropertyType >= 100 %} style="display:none" {% endif %}>
+        <td>Number of Bed rooms</td>
+        <td>{{form.BedRooms}}
+		<p id="errbedrooms"></p></td>
+      </tr>
+      <tr id=BathRooms {% if PropertyType >= 100 %} style="display:none" {% endif %}>
+        <td>Number of Bath rooms</td>
+        <td>{{form.BathRooms}}
+		<p id="errbathrooms"></p></td>
+      </tr> 
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+   <script>
+
+$("#id_PropertyType").change(function()
+{ 
+	var category = $("#id_PropertyType").val();
+	if(category < 100)
+	{
+		$("#BedRooms").show();
+		$("#BathRooms").show();
+	}
+	if(category >= 100)
+	{
+	    $("#BedRooms").hide();
+		$("#BathRooms").hide();
+	}
+});
+</script>
+
+      <tr>
+        <td>Area</td>
+        <td>{{form.Area}}</td>
+      </tr>
+      <tr>
+        <td>AreaUnit</td>
+        <td>{{form.AreaUnit}}</td>
+      </tr>
+      <tr>
+        <td>Virtual Tour </td>
+        <td>{{form.VirtualTour}}</td>
+      </tr>
+      
+      <tr>
+        <td>Possession</td>
+        <td>{{form.Possession}}</td>
+      </tr>
+      <tr>
+        <td>ConstructionYear</td>
+        <td>{{form.ConstructionDate}}</td>
+      </tr>
+      <tr>
+        <td>Property Status </td>
+        <td>{{form.PropertyStatus}}
+        </td>
+      </tr>
+    </table>
+    {%endif%}
+    {% if type == 2 %}
+    <table align="center" width="100%" border="0" cellspacing="0" cellpadding="3" id="Panel1">
+      <tr>
+        <td width="201">PropertyType </td>
+        <td width="879">{{form.PropertyType}}
+		<p id="rerrpropertytype"></p></td>
+      </tr>
+      <tr>
+        <td>OwnerShip</td>
+        <td>{{form.Ownership}}
+          <p id="rerrownership"></p></td>
+      </tr>
+      <tr>
+        <td>Title</td>
+        <td>{{form.Title}}
+		<p id="rerrtitle"></p></td>
+      </tr>
+      <tr>
+        <td>Rent</td>
+        <td>{{form.Rent}}
+          <p id="rerrrent"></p></td>
+      </tr>
+      <tr>
+        <td>RentFrequency</td>
+        <td>{{form.RentFrequency}}</td>
+      </tr>
+      <tr>
+        <td>Advance Amount</td>
+        <td>{{form.AdvanceAmount}}
+		<p id="rerradvanceamount"></p></td>
+      </tr>
+      <tr>
+        <td>Maintenance</td>
+        <td>{{form.Maintenance}}</td>
+      </tr>
+      <tr>
+        <td>Allowed Family</td>
+        <td>{{form.AllowedFamily}}</td>
+      </tr>
+      <tr>
+        <td>Allowed Bachelors</td>
+        <td>{{form.AllowedBachelors}}</td>
+      </tr>
+	  
+      <tr id=BedRooms   {% if PropertyType >= 100 %} style="display:none" {% endif %}>
+        <td>BedRooms </td>
+        <td>{{form.BedRooms}}
+		<p id="rerrbedrooms"></p></td>
+      </tr>
+     <tr id=BathRooms   {% if PropertyType >= 100 %} style="display:none" {% endif %}>
+        <td >BathRooms</td>
+        <td>{{form.BathRooms}}
+		<p id="rerrbathrooms"></p></td>
+      </tr>
+    <script>
+$("#id_PropertyType").change(function()
+{ 
+	var category = $("#id_PropertyType").val();
+	if(category < 100)
+	{
+		$("#BedRooms").show();
+		$("#BathRooms").show();
+	}
+	if(category >= 100)
+	{
+	    $("#BedRooms").hide();
+		$("#BathRooms").hide();
+	}
+});
+</script>
+      <tr>
+        <td>Area</td>
+        <td>{{form.Area}}</td>
+      </tr>
+      <tr>
+        <td>AreaUnit</td>
+        <td>{{form.AreaUnit}}</td>
+      </tr>
+      
+      <tr>
+        <td>Virtual Tour </td>
+        <td>{{form.VirtualTour}}</td>
+      </tr>
+      <tr>
+        <td>Possession</td>
+        <td>{{form.Possession}}</td>
+      </tr>
+      <tr>
+        <td>ConstructionYear</td>
+        <td>{{form.ConstructionDate}}</td>
+      </tr>
+      <tr>
+        <td>Present Status </td>
+        <td>{{form.PresentStatus}}
+        </td>
+      </tr>
+    </table>
+    {% endif %}
+    <table width="100%" border="0" cellspacing="0" cellpadding="3" id="Panel2"  style="display:none">
+      <tr>
+        <td width="144">{{form.Description}}
+		<p id="errdescription"></p></td>
+      </tr>
+    </table>
+    <table width="100%" border="0" cellspacing="0" cellpadding="3" id="Panel3"  style="display:none">
+      <tr>
+	  <td>Address</td>
+        <td colspan="2">{{form.Address}}
+          <p id="erraddress"></p></td>
+      </tr>
+      <tr>
+        <td>City </td>
+        <td>
+		<!-- Begin Ajax City -->		  
+		  <div style="position: relative;">
+               {{form.City}}<p id="errcity"></p>
+               <input type="hidden" name="city" id="id_City-x" style="color: #CCC; position: absolute; background: transparent; z-index: 1;"/>
+         </div>
+		 {{form.CityID.as_hidden}}
+         <!-- End Ajax City -->
+        </td>
+      </tr>
+      <tr>
+        <td>State</td>
+        <td>{{form.State}}
+          <p id="errstate"></p></td>
+      </tr>
+      <tr>
+        <td>PostalCode</td>
+        <td>{{form.PostalCode}}</td>
+      </tr>
+      <tr>
+        <td>Landmark1</td>
+        <td>{{form.LandMark1}}</td>
+      </tr>
+      <tr>
+        <td>Landmark2</td>
+        <td>{{form.LandMark2}}</td>
+      </tr>
+      <tr>
+        <td>Landmark3</td>
+        <td>{{form.LandMark3}}</td>
+      </tr>
+      <tr>
+        <td>Landmark4</td>
+        <td>{{form.LandMark4}}</td>
+      </tr>
+    </table>
+    <!---- Do not delete the following table -->
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" id="Panel4" style="display:none">
+    <tr>
+      <td>
+<form>
+  <fieldset class="gllpLatlonPicker">
+  <br/>
+  <div class="gllpMap">Google Maps</div>
+  <br/>
+  <input type="text" name="Latitude" class="gllpZoom" value="5" style="display:none"/>
+  <input type="button" name="Longtitude" class="gllpUpdateButton" value="update map" style="display:none">
+  <br/>
+  <div style="display:none">Latitude:{{form.Latitude}} Longitude:{{form.Longitude}}</div>
+  </fieldset>
+</form>
+</td>
+</tr>
+</table>
+<!-- Do not delete the above table -->
+<table width="100%" border="0" cellspacing="0" cellpadding="3" id="Panel5"  style="display:none">
+  {% for imgObj in image_list %}
+  <tr>
+    <td><table width="100%" border="0" cellspacing="1" cellpadding="1">
+        <tr>
+		{%if imgObj.listingimageid != 0%}
+          <td width="200px"><img src="{{IMAGE_URL}}{{imgObj.largeimage}}" alt="Image Description" width="140px" height="140px" class="img-thumbnail" /></td>{%else%}
+		  <td width="200px"><img src="{{imgObj.largeimage}}" alt="Image Description" width="140px" height="140px" class="img-thumbnail" /></td>
+		 {%endif%}
+          <td><TextArea name="Description-{{forloop.counter}}" style="width:200px" rows="6" placeholder="You can explain about this image or leave blank">{{imgObj.description}}</TextArea>
+		   <input type="hidden" name="ImageThumb-{{forloop.counter}}" value="{{imgObj.imagethumb}}"></td>
+            <input type="hidden" name="ListingImageID-{{forloop.counter}}" value="{{imgObj.listingimageid}}"></td>
+			{%if imgObj.listingimageid != 0%}
+			<td>Mark For Delete</td>
+			<td><input name="ImgDelete-{{forloop.counter}}" type="checkbox" value="{{imgObj.listingimageid}}" /></td>
+			{%endif%}
+        </tr>
+        <tr>
+          <td><input type="file" name="file-{{forloop.counter}}" class="fileupload-new" /></td>
+        </tr>
+      </table></td>
+  </tr>
+  {% endfor %}
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="3" id="Panel6"  style="display:none">
+  <tr>
+    <td width="106">ContactName</td>
+    <td width="96">{{form.ContactName}}
+	<p id="errcontactname"></p></td>
+  </tr>
+  <tr>
+    <td>Phone</td>
+    <td width="96">{{form.Phone}}
+	<p id="errphone"></p></td>
+  </tr>
+  <tr>
+    <td>Email</td>
+    <td>{{form.Email}}
+	<p id="erremail"></p></td>
+  </tr>
+  <tr>
+    <td>Website</td>
+    <td>{{form.Website}}</td>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="3" id="Panel7"  style="display:none">
+  <tr>
+    <td>Lift</td>
+    <td>{{form.Lift}}</td>
+  </tr>
+  <tr>
+    <td>Gym</td>
+    <td>{{form.Gym}}</td>
+  </tr>
+  <tr>
+    <td>SwimmingPool</td>
+    <td>{{form.SwimmingPool}}</td>
+  </tr>
+  <tr>
+    <td>GatedCommunity</td>
+    <td>{{form.GatedCommunity}}</td>
+  </tr>
+  <tr>
+    <td>PowerBackup</td>
+    <td>{{form.PowerBackUp}}</td>
+  </tr>
+  <tr>
+    <td>Furnished</td>
+    <td>{{form.Furnished}}</td>
+  </tr>
+  <tr>
+    <td>CupBoards</td>
+    <td>{{form.Cupboards}}</td>
+  </tr>
+  <tr>
+    <td>Facing</td>
+    <td>{{form.Facing}}</td>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="3" id="Panel8"  style="display:none">
+  {% for Obj in attr_list %}
+  <tr>
+    <td align="center"><table width="100%" border="0" cellspacing="1" cellpadding="1">
+        <tr>
+          <td><input type="text" name="Name-{{forloop.counter}}" value="{{Obj.name}}">
+            <input type="hidden" name="AttributeID-{{forloop.counter}}" value="{{Obj.attributeid}}"></td>
+			<td><textarea  name="Value-{{forloop.counter}}">{{Obj.value}}</textarea></td>
+        </tr>
+      </table></td>
+  </tr>
+  {% endfor %}
+</table>
+</td>
+</tr>
+</table>
+</div>
+<table width="200" >
+  <tr>
+    <td>&nbsp;</td>
+    <td>{{approved.Approved}}</td>
+  </tr>
+</table>
+<table width="200" >
+ <tr>
+      <td>Your current plan </td>
+      <td>{{form.Planid}}
+	  </td>
+  </tr>
+	<tr>
+      <td>PostedDate</td>
+      <td id=postdate title="You can change it after 15 days only">{{form.PostedDate}}</td>
+    </tr>
+</table>
+<input type="submit" id="cmdSubmit" value="Save Changes" onClick="return ValidateListingForm()" />
+</div>
+</div>
+</form>
+<div id="footer" align="center"class="clean back_to_top">
+			<div class="top">
+				<div class="container">
+					<a class="arrow up"  id="to_top"  href="#">BACK TO TOP</a>
+				</div>
+			</div>
+
+<!-- End Listing Info DIVs -->
+
+  
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>
+
+function ShowPanel(panelName)
+{
+  $('table').filter('[id^="Panel"]').attr('style', 'display:none');
+  $('li').filter('[id^="Tab"]').removeAttr('class');
+  tabName = $('#' + panelName).attr('id').replace('Panel', 'Tab');
+  $('#' + tabName).attr('class', 'active');
+  $('#' + panelName).removeAttr('style');
+}
+
+$(document).ready(function(){
+  //tab_list = document.querySelectorAll('[id^="Tab"]');
+
+  $("li[id^=Tab]").click(function(){
+    $('#SuccessMessage').html("");
+    $('li').filter('[id^="Tab"]').removeAttr('class');
+	$('table').filter('[id^="Panel"]').attr('style', 'display:none');
+	$(this).attr('class', 'active');
+	panel = $(this).attr('id').replace('Tab', 'Panel');
+	$('#' + panel).removeAttr('style');
+	//ShowPanel(panel);
+	if (panel == 'Panel1')
+	{
+	  $('#PanelMessage').html('This is a primary information of your property. The search results will be served based on the information you have provided here.');
+	}
+	else if (panel == 'Panel2')
+	{
+	  $('#PanelMessage').html('Please explain more about your property.');
+	}
+	else if (panel == 'Panel3')
+	{
+	  $('#PanelMessage').html('Please enter the exact location of your property');
+	}
+	else if (panel == 'Panel4')
+	{
+	   $('#PanelMessage').html('Please point exact location of your property. You can drag the pointer to the exact location.');
+	
+	   if (mymap)
+	   {
+         mymap.init( $(".gllpLatlonPicker"), $("#id_City").val());
+		 lat = parseFloat($('#id_Latitude').val());
+		 long = parseFloat($('#id_Longitude').val());
+		 if (lat)
+		 {
+		    //alert("I am executing");
+  		    mymap.SetPosition(lat, long);
+		 }
+		 else
+		 { 
+		   //alert("I am setting location by city name");
+		   mymap.GeoCode($("#id_City").val());
+		 }
+	   }
+	}
+    else if (panel == 'Panel5')
+	{
+	  $('#PanelMessage').html('You can add 5 images per lisitng.');
+	}
+    else if (panel == 'Panel5')
+	{
+	  $('#PanelMessage').html('Please enter contact information for this listing. By default, your contact number will be diplayed. You can provide new number and verify the mobile');
+	}
+    else if (panel == 'Panel6')
+	{
+	  $('#PanelMessage').html('You can mention what facilities  you are providing this property.');
+	}
+    else if (panel == 'Panel7')
+	{
+	  $('#PanelMessage').html('You can provide more information like details of interiors or landmarks and distances');
+	}
+
+
+
+  });
+  //$('#Panel4').attr('style', 'display:none');
+});
+</script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>
+	function ValidateListingForm()
+	{
+
+		 success = ValidateBasicInfo();
+		 
+
+		 if(success)
+		 {
+			success = ValidateDescription()
+		 }
+		 
+		 if(success)
+		 {
+			success = ValidateLocation();
+		 }
+
+		 if(success)
+		 {
+			success = ValidateContactInfo();
+		 }
+		 return success;
+     }
+	
+</script>
+{% if type == 1 %}
+	<script>
+	function ValidateBasicInfo()
+	{
+	     
+		 var a = +$("#id_PropertyType").val();
+		 var b = +$("#id_Ownership").val();
+		 var c = $("#id_Title").val();
+		 var d = $("#id_Price").val();
+		 var e = $("#id_BedRooms").val();
+		 var g = $("#id_BathRooms").val();
+		 is_error=false; 
+		   if(a == 0)
+			 {
+			   errmsg = "Please enter PropertyType";
+			   is_error = true;  
+			   document.getElementById("errpropertytype").style.color="red";
+			   $("#errpropertytype").html(errmsg);
+			   $("#id_PropertyType").focus();
+			   ShowPanel('Panel1');
+			 }
+			if(b == 0)
+			 {
+			   errmsg = "Please enter Ownership";
+			   is_error = true; 
+			   document.getElementById("errownership").style.color="red";
+			   $("#errownership").html(errmsg);
+			   $("#id_OwnerShip").focus();
+			  }
+			
+		
+			if(c == "")
+			 {
+			   errmsg = "Please enter Title";
+			   is_error = true; 
+			   document.getElementById("errtitle").style.color="red";
+			   $("#errtitle").html(errmsg);
+			   $("#id_Title").focus();
+			  }
+		
+			if (d == "")
+			 {
+			   errmsg = "Please enter Price";
+			   is_error = true; 
+			   document.getElementById("errprice").style.color="red";
+			   $("#errprice").html(errmsg);
+			   $("#id_Price").focus();
+			 }
+			if (e == "")
+			   {
+				 errmsg = "Please enter BedRooms";
+				 is_error = true;
+				 document.getElementById("errbedrooms").style.color="red";
+				 $("#errbedrooms").html(errmsg);
+				 $("#id_BedRooms").focus();		 
+			   }
+		
+			if(g == "")
+			{
+				errmsg = "Please enter BathRooms";
+				is_error = true;
+				document.getElementById("errbathrooms").style.color="red";
+				$("#errbathrooms").html(errmsg);
+				$("#id_BathRooms").focus();
+			}
+			if(is_error)
+			{
+			  return false;
+			}
+			else
+			{
+			 return true;
+			}
+				
+}
+</script>
+{% endif %}
+{% if type == 2 %}
+   	<script>
+	function ValidateBasicInfo()
+	{
+	     
+		 var a = +$("#id_PropertyType").val();
+		 var b = +$("#id_Ownership").val();
+		 var c = $("#id_Title").val();
+		 var d = $("#id_Rent").val();
+		// var h = $("#id_AdvanceAmount").val();
+		 var e = $("#id_BedRooms").val();
+		 var g = $("#id_BathRooms").val();
+		 is_error=false; 
+		   if(a == 0)
+			 {
+			   errmsg = "Please enter PropertyType";
+			   is_error = true;  
+			   document.getElementById("rerrpropertytype").style.color="red";
+			   $("#rerrpropertytype").html(errmsg);
+			   $("#id_PropertyType").focus();
+			   ShowPanel('Panel1');
+			 }
+			if(b == 0)
+			 {
+			   errmsg = "Please enter Ownership";
+			   is_error = true; 
+			   document.getElementById("rerrownership").style.color="red";
+			   $("#rerrownership").html(errmsg);
+			   $("#id_OwnerShip").focus();
+			   
+			  }
+			
+			if(c == "")
+			 {
+			   errmsg = "Please enter Title";
+			   is_error = true; 
+			   document.getElementById("rerrtitle").style.color="red";
+			   $("#rerrtitle").html(errmsg);
+			   $("#id_Title").focus();
+			  }
+		
+			if (d == "")
+			 {
+			   errmsg = "Please enter Rent";
+			   is_error = true; 
+			   document.getElementById("rerrrent").style.color="red";
+			   $("#rerrrent").html(errmsg);
+			   $("#id_Rent").focus();
+			 }
+			/*if (h == "")
+			   {
+				 errmsg = "Please enter Advance Amount";
+				 is_error = true;
+				 document.getElementById("rerradvanceamount").style.color="red";
+				 $("#rerradvanceamount").html(errmsg);
+				 $("#id_AdvanceAmount").focus();
+				 ShowPanel('Panel1');		 
+			   }*/
+
+			if (e == "")
+			   {
+				 errmsg = "Please enter BedRooms";
+				 is_error = true;
+				 document.getElementById("rerrbedrooms").style.color="red";
+				 $("#rerrbedrooms").html(errmsg);
+				 $("#id_BedRooms").focus();		 
+			   }
+		
+			if(g == "")
+			{
+				errmsg = "Please enter BathRooms";
+				is_error = true;
+				document.getElementById("rerrbathrooms").style.color="red";
+				$("#rerrbathrooms").html(errmsg);
+				$("#id_BathRooms").focus();
+			}
+			if(is_error)
+			{
+			  return false;
+			}
+			else
+			{
+			 return true;
+			}
+				
+}
+</script>
+{% endif %}
+
+		<script>
+		function ValidateDescription()
+		{
+			var a = $("#id_Description").val();
+			if( a == '')
+			{
+				errmsg = "please enter Property Description";
+				/*is_error = true;*/
+				document.getElementById("errdescription").style.color ="red";
+				$("#errdescription").html(errmsg);
+				$("#id_Description").focus();
+				ShowPanel('Panel2');
+				return false;
+			}
+			
+			return true;
+					}
+	</script>
+<script>
+	function ValidateLocation()
+	{
+		var a = $("#id_Address").val();
+		var b = $ ("#id_City").val();
+		var c = +$ ("#id_State").val();
+		is_error =false;
+			if( a =='')
+			{
+			errmsg = "please enter address of your Property";
+			document.getElementById("erraddress").style.color="red";
+			is_error = true;
+			$("#erraddress").html(errmsg);
+			$("#id_Address").focus();
+			ShowPanel('Panel3');
+			}
+			if(b == '')
+			{
+				errmsg = "please enter city of your property";
+				document.getElementById("errcity").style.color="red";
+				is_error = true;
+				$("#errcity").html(errmsg);
+				$("#id_City").focus();
+			}
+			if( c == 0)
+			{
+				errmsg = "please enter state of your property"
+				document.getElementById("errstate").style.color="red";
+				is_error = true;
+				$("#errstate").html(errmsg);
+				$("#id_State").focus();
+				
+			}
+			if(is_error)
+			{
+			  return false;
+			}
+			else
+			{
+			 return true;
+			}
+	}	
+</script>
+	<script>
+	/*function ValidateImages()
+	{
+		var a = document.getElementsByName("img-thumbnail"); 
+		is_error =false;
+	    if(a == '')
+		{
+			
+		}
+	}*/
+	</script>
+	<script>
+	function ValidateContactInfo()
+	{
+		var a = $("#id_ContactName").val();
+		var b = $("#id_Phone").val();
+		var c = $("#id_Email").val();
+		is_error = false;
+		if( a=='')
+		{
+			errmsg = "plesae enter your Name";
+			document.getElementById("errcontactname").style.color="red";
+			is_error = true;
+			$("#errcontactname").html(errmsg);
+			$("#id_ContactName").focus();
+			ShowPanel('Panel6');
+		}
+		if( b=='' )
+		{
+			errmsg = "please enter your Phone no";
+			document.getElementById("errphone").style.color="red";
+			is_error = true;
+			$("#errphone").html(errmsg);
+			$("#id_Phone").focus();
+		}
+		if(b =='' && c== '')
+		{
+			errmsg = "please enter your Email Id";
+			document.getElementById("erremail").style.color="red";
+			is_error = true;
+			$("#erremail").html(errmsg);
+			$("#id_Email").focus();
+		}
+		if(is_error)
+			{
+			  return false;
+			}
+			else
+			{
+			 return true;
+			}		
+	}
+	
+</script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.mockjax.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.autocomplete.js"></script>
+<script src="{{ STATIC_URL }}js/cities.js"></script>
+		
+{% endblock content %}

@@ -1,0 +1,264 @@
+{% extends 'base-home.html' %}
+{% block content %}
+<div style="width:800px; margin-left:15%; margin-right:25%; margin-top:5%;">
+  <div class="round-rect" style="background-color:#FFFFFF">
+    <form id="lForm" action="/new-listing" method="post" enctype="multipart/form-data" name="ListingForm" class="form-horizontal">
+      {% csrf_token %}
+      <legend style="font-size:24px; color:#FF9966">Property Information</legend>
+      {{ErrorMessage}}
+      <table width="58%" border="0" cellspacing="1" cellpadding="3">
+        <tr>
+          <td width="24%">Property Type </td>
+          <td width="76%">{{form.Property_Type}}
+            <p id="Err1"></p>
+            {{form.listingType.as_hidden}}</td>
+        </tr>
+        <tr>
+		{%if Type == '1'%}
+          <td>Price</td>
+		{%else%}
+		  <td> Rent per Month</td>
+		{%endif%}
+          <td>{{form.Price}}
+            <p id="Err2"> </p>{{ErrMsg}}</td>
+        </tr>
+        <tr>
+          <td>Area</td>
+          <td>{{form.Area}}{{form.AreainWords}} <p id="Err15"> </p></td>
+        </tr>
+        <tr id="Bedroom">
+          <td>Bed Rooms </td>
+          <td>{{form.BedRooms}}
+            <p id="Err3"> </p></td>
+        </tr>
+        <tr id="Bathroom">
+          <td>Bath Rooms </td>
+          <td>{{form.BathRooms}}
+            <p id="Err4"> </p></td>
+        </tr>
+        <tr>
+          <td colspan="2">Property Location </td>
+        </tr>
+        <tr>
+          <td colspan="2">{{form.PropertyLocation}}
+            <p id="Err5"> </p></td>
+        </tr>
+        <tr>
+          <td colspan="2">City &amp; State </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+		  <!-- Begin Ajax City -->		  
+		  <div style="position: relative;">
+               {{form.City}}{{form.State}}<p id="Err6"></p> <p id="Err7"></p>
+               <input type="hidden" name="city" id="id_City-x" style="color: #CCC; position: absolute; background: transparent; z-index: 1;"/>
+         </div>
+		 {{form.CityID.as_hidden}}
+         <!-- End Ajax City -->
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">Tell us about your Property (Type in your own words) </td>
+        </tr>
+        <tr>
+          <td colspan="2">{{form.TellabturProperty}}
+            <p id="Err8"> </p></td>
+        </tr>
+        <tr>
+          <td>Property Image</td>
+          <td><input type="file" name="ImageData" id="Imageid"/>{{Errimage}}</td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+      </table>
+      <p style="font-size:24px; color:#FF9966">&nbsp;</p>
+      <br />
+      <legend style="font-size:24px; color:#FF9966">Personal Information</legend>
+      <table width="504" border="0" cellpadding="3" cellspacing="1">
+        <tr>
+          <td width="123">Name</td>
+          <td colspan="3">{{form.Name}}
+          <p id="Err10"></p></td>
+        </tr>
+        <tr>
+          <td>Email</td>
+          <td colspan="3">{{form.Email}}
+            <p id="Err11"></p></td>
+        </tr>
+        <tr>
+          <td>Contact No. </td>
+          <td colspan="3">{{form.Contactno}}
+          <p id="Err12"> </p></td>
+        </tr>
+        <tr>
+          <td>Ownership </td>
+          <td colspan="3">{{form.ownershipType}}
+          <p id="Err13"> </p></td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td colspan="3"><input type="submit" name="Submit" value="Submit" onclick="return listingValidation()"/>
+            <input type="submit" name="Submit" value="Cancel"/></td>
+        </tr>
+      </table>
+    </form>
+<script>
+$("#id_Property_Type").change(function()
+{ 
+	var Property_Selected = $("#id_Property_Type").val()
+	if(Property_Selected >= 10 && Property_Selected <= 50)
+	{
+		$("#Bedroom").show();
+		$("#Bathroom").show();
+	}
+	if(Property_Selected >= 100)
+	{
+		$("#Bedroom").hide();
+		$("#Bathroom").hide();
+	}
+});
+</script>
+<script>
+function listingValidation()
+{   
+   
+	var pType = $("#id_Property_Type").val()
+	var price = $("#id_Price").val()
+	var bedrooms = $("#id_BedRooms").val()
+	var bathrooms = $("#id_BathRooms").val()
+	var pLocation = $("#id_PropertyLocation").val()
+	var cityid = $("#id_City").val()
+	var stateid = $("#id_State").val()
+	var tellabturprpty = $("#id_TellabturProperty").val()
+	var image = $("#Imageid").val()
+	var name = $("#id_Name").val()
+	var email = $("#id_Email").val()
+	var contactno = $("#id_Contactno").val()
+	var otype = $("#id_ownershipType").val()
+	var areainwords = $("#id_AreainWords").val()
+	is_error = false;
+	
+	var	re = /^(\d+(\.\d+)?)*\s*((Thousands?)|(thousands?)|(Lacs?)|(lacs?)|(Crores?)|(crores?))?\s*$/;
+	if(!re.test(price))
+	{
+	   alert(price);
+	   errmsg = "Invalid Format it should be either 25 Lacs or 2500000";
+	   is_error = true;  
+	   document.getElementById("Err2").style.color="red";
+	   $("#Err2").html(errmsg);
+	}
+	if(!areainwords ||  areainwords == "")
+	{
+	   errmsg = "Specify Area in units";
+	   is_error = true; 
+	   document.getElementById("Err15").style.color="red";
+	   $("#Err15").html(errmsg);
+	}
+	if(!pType || pType == " ")
+	 {
+       errmsg = "Select Property Type";
+	   is_error = true; 
+	   document.getElementById("Err1").style.color="red";
+	   $("#Err1").html(errmsg);
+	 }
+	if(!price || price <= 0)
+	 {
+	   errmsg = "Price should be > 0";
+	   is_error = true;  
+	   document.getElementById("Err2").style.color="red";
+	   $("#Err2").html(errmsg);
+	 }
+	if(bedrooms <= 0 || bedrooms == " ")
+	 {
+	   errmsg = "Please Enter no. of Bedrooms";
+	   is_error = true;  
+	   document.getElementById("Err3").style.color="red";
+	   $("#Err3").html(errmsg);
+	  }
+	if (bathrooms == 0 || bathrooms == " ")
+	 {
+	   errmsg = "Please Enter no. of Bathrooms";
+	   is_error = true; 
+	   document.getElementById("Err4").style.color="red";
+	   $("#Err4").html(errmsg);
+      
+	 }
+	if (pLocation == " ")
+	   {
+	     errmsg = "Please Enter Location";
+	   	 is_error = true;
+		 document.getElementById("Err5").style.color="red";
+		 $("#Err5").html(errmsg);
+	   }
+	if(cityid == 0 || cityid == " ")
+	 {
+	 	errmsg = "Please Enter City";
+	    is_error = true;
+		document.getElementById("Err6").style.color="red";
+		$("#Err6").html(errmsg);
+	}	
+	if(stateid == 0 || stateid == " ")
+	{
+		errmsg = "Please Enter State";
+	    is_error = true;
+		document.getElementById("Err7").style.color="red";
+		$("#Err7").html(errmsg);
+	}
+	if(!tellabturprpty || tellabturprpty == " ")
+	{
+		errmsg = "Please write brief information about your property";
+	    is_error = true;
+		document.getElementById("Err8").style.color="red";
+		$("#Err8").html(errmsg);
+	}
+	
+	if(!name || name == " ")
+	{
+		errmsg = "Please Enter Your name";
+	    is_error = true;
+	  	document.getElementById("Err10").style.color="red";
+		$("#Err10").html(errmsg);
+	}
+	
+	if(!email || email== " ")
+	{
+		errmsg = "Please Enter Emailid";
+	    is_error = true;
+		document.getElementById("Err11").style.color="red";
+		$("#Err11").html(errmsg);
+	}
+	if(contactno.length < 10 || contactno== " ") 
+	{
+		errmsg = "Please Enter contact number, it should be 10 characters";
+	    is_error = true;
+		document.getElementById("Err12").style.color="red";
+		$("#Err12").html(errmsg);
+	}
+	if(!otype || otype == " ")
+	{
+		errmsg = "Please select OwnerType";
+	    is_error = true;
+		document.getElementById("Err13").style.color="red";
+		$("#Err13").html(errmsg);
+	}
+
+	if(is_error)
+	{
+	  return false;
+	}
+	else
+	{
+	 return true;
+	}
+}
+</script>
+<script>
+
+  </div>
+</div>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.mockjax.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.autocomplete.js"></script>
+<script src="{{ STATIC_URL }}js/cities.js"></script>
+{% endblock content %}
